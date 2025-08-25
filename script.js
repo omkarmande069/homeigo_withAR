@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Session Manager
+  const sessionManager = new SessionManager();
+  
   // State Management
   const state = {
     currentPage: 'home',
@@ -57,6 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
   };
 
+  // Listen for auth state changes
+  document.addEventListener('authStateChanged', (event) => {
+    console.log('Auth state changed in main app:', event.detail);
+    renderNavigation(); // Re-render navigation when auth state changes
+    lucide.createIcons();
+  });
+
   const renderCurrentPage = () => {
     Object.values(pageEls).forEach(el => el.classList.add('hidden'));
     if (pageEls[state.currentPage]) {
@@ -65,6 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const renderNavigation = () => {
+    const isLoggedIn = sessionManager.isLoggedIn();
+    const userName = sessionManager.getUserName();
+    
     navigationEl.innerHTML = `
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -74,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <button data-page="products" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Products</button>
             <button data-page="about" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">About</button>
             <button data-page="contact" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Contact</button>
-            <a href="login.html" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Login</a>
+            ${!isLoggedIn ? '<a href="login.html" data-login-link class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Login</a>' : ''}
           </div>
           <div class="flex items-center space-x-4">
             <div class="relative hidden md:block">
@@ -85,11 +98,66 @@ document.addEventListener('DOMContentLoaded', () => {
               <i data-lucide="shopping-cart" class="w-5 h-5"></i>
               ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-amber-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">${getCartCount()}</span>` : ''}
             </button>
-            <button class="p-2 text-gray-700 hover:text-amber-600 transition-colors"><i data-lucide="user" class="w-5 h-5"></i></button>
+            
+            <!-- User Menu -->
+            ${isLoggedIn ? `
+              <div class="relative">
+                <button data-user-button class="flex items-center space-x-2 p-2 text-gray-700 hover:text-amber-600 transition-colors">
+                  <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    ${userName.charAt(0).toUpperCase()}
+                  </div>
+                  <span class="hidden md:block text-sm text-gray-700">${userName}</span>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div data-user-menu class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                  <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                    <div class="font-medium">${userName}</div>
+                    <div class="text-gray-500">${sessionManager.getUserEmail()}</div>
+                  </div>
+                  <a href="dashboard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                  <a href="#" data-page="profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                  <a href="#" data-page="orders" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Orders</a>
+                  <a href="#" data-page="wishlist" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
+                  <div class="border-t"></div>
+                  <button data-logout class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</button>
+                </div>
+              </div>
+            ` : `
+              <button class="p-2 text-gray-700 hover:text-amber-600 transition-colors">
+                <i data-lucide="user" class="w-5 h-5"></i>
+              </button>
+            `}
           </div>
         </div>
       </div>
     `;
+    
+    // Add event listeners for user menu
+    const userButton = navigationEl.querySelector('[data-user-button]');
+    const userMenu = navigationEl.querySelector('[data-user-menu]');
+    const logoutButton = navigationEl.querySelector('[data-logout]');
+    
+    if (userButton && userMenu) {
+      userButton.addEventListener('click', () => {
+        userMenu.classList.toggle('hidden');
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!userButton.contains(e.target) && !userMenu.contains(e.target)) {
+          userMenu.classList.add('hidden');
+        }
+      });
+    }
+    
+    if (logoutButton) {
+      logoutButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await sessionManager.logout();
+      });
+    }
   };
 
   const renderHomePage = () => {
