@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeGo - Furniture Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      max-width: 1000px;
+      width: 100%;
+      margin: 20px;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      animation: float 20s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-20px) rotate(360deg); }
+    }
+
+    .brand {
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .brand p {
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .furniture-icon {
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .furniture-icon svg {
+      width: 60px;
+      height: 60px;
+      color: white;
+    }
+
+    .right-panel {
+      flex: 1;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-form {
+      max-width: 400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .form-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .form-header p {
+      color: #6b7280;
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f9fafb;
+    }
+
+    .password-input {
+      padding-right: 50px !important;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #f59e0b;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    }
+
+    .form-group.error input {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6b7280;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-toggle:hover {
+      color: #374151;
+    }
+
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 0.875rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .form-group.error .error-message {
+      display: block;
+    }
+
+    .password-strength {
+      margin-top: 8px;
+      display: none;
+    }
+
+    .strength-bar {
+      width: 100%;
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+
+    .strength-fill {
+      height: 100%;
+      transition: all 0.3s ease;
+      width: 0%;
+    }
+
+    .strength-weak { background: #ef4444; }
+    .strength-medium { background: #f59e0b; }
+    .strength-strong { background: #10b981; }
+
+    .strength-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      font-size: 0.875rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: auto;
+    }
+
+    .forgot-link {
+      color: #f59e0b;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-link:hover {
+      color: #d97706;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+      display: none;
+    }
+
+    .submit-btn.loading .loading-spinner {
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .auth-switch {
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-top: 32px;
+    }
+
+    .auth-switch a {
+      color: #f59e0b;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .auth-switch a:hover {
+      color: #d97706;
+    }
+
+    .form-container {
+      display: none;
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .success-message,
+    .info-message,
+    .error-alert {
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 0.875rem;
+      display: none;
+      padding: 12px 16px;
+    }
+
+    .success-message {
+      background: #ecfdf5;
+      border: 1px solid #10b981;
+      color: #065f46;
+    }
+
+    .info-message {
+      background: #eff6ff;
+      border: 1px solid #3b82f6;
+      color: #1e40af;
+    }
+
+    .error-alert {
+      background: #fef2f2;
+      border: 1px solid #ef4444;
+      color: #dc2626;
+    }
+
+    .success-message.show,
+    .info-message.show,
+    .error-alert.show {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        margin: 10px;
+      }
+
+      .left-panel {
+        padding: 40px 20px;
+      }
+
+      .right-panel {
+        padding: 40px 20px;
+      }
+
+      .brand h1 {
+        font-size: 2rem;
+      }
+
+      .furniture-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 24px;
+      }
+
+      .furniture-icon svg {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <div class="furniture-icon">
+        <svg fill="currentColor" viewBox="0 0 24 24">
+          <path d="M3 9v6h4l2 5.5 2-5.5h4V9c0-2.2-1.8-4-4-4H7c-2.2 0-4 1.8-4 4z"/>
+          <path d="M1 11h2v4H1zM21 11h2v4h-2z"/>
+        </svg>
+      </div>
+      <div class="brand">
+        <h1>HomeGo</h1>
+        <p>Transform your house into a beautiful home with our premium furniture collection</p>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <!-- Login Form -->
+      <div id="loginForm" class="form-container active">
+        <form class="auth-form fade-in">
+          <div class="form-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to your account to continue</p>
+          </div>
+
+          <div id="loginSuccess" class="success-message">
+            Login successful! Redirecting...
+          </div>
+
+          <div id="loginError" class="error-alert">
+          </div>
+
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" name="email" required>
+            <div class="error-message">Please enter a valid email address</div>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="password" class="password-input" required>
+            <button type="button" class="password-toggle" data-target="loginPassword">
+              <svg class="eye-open" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <svg class="eye-closed" style="display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+              </svg>
+            </button>
+            <div class="error-message">Password is required</div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="rememberMe" name="remember">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <div class="loading-spinner"></div>
+            <span class="btn-text">Sign In</span>
+          </button>
+
+          <div class="auth-switch">
+            Don't have an account? <a href="#" id="showSignup">Create one</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signupForm" class="form-container">
+        <form class="auth-form fade-in">
+          <div class="form-header">
+            <h2>Create Account</h2>
+            <p>Join HomeGo and start furnishing your dream home</p>
+          </div>
+
+          <div id="signupSuccess" class="success-message">
+            Account created successfully! Please check your email to verify your account.
+          </div>
+
+          <div id="signupError" class="error-alert">
+          </div>
+
+          <div class="form-group">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" name="name" required>
+            <div class="error-message">Full name is required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="signupEmail">Email Address</label>
+            <input type="email" id="signupEmail" name="email" required>
+            <div class="error-message">Please enter a valid email address</div>
+          </div>
+
+          <div class="form-group">
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" name="password" class="password-input" required>
+            <button type="button" class="password-toggle" data-target="signupPassword">
+              <svg class="eye-open" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <svg class="eye-closed" style="display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+              </svg>
+            </button>
+            <div class="error-message">Password must be at least 8 characters long</div>
+            <div class="password-strength">
+              <div class="strength-bar">
+                <div class="strength-fill"></div>
+              </div>
+              <div class="strength-text">Password strength: <span class="strength-level">Weak</span></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="password-input" required>
+            <button type="button" class="password-toggle" data-target="confirmPassword">
+              <svg class="eye-open" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <svg class="eye-closed" style="display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+              </svg>
+            </button>
+            <div class="error-message">Passwords do not match</div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="agreeTerms" name="terms" required>
+              <span>I agree to the <a href="#" class="forgot-link">Terms & Conditions</a></span>
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <div class="loading-spinner"></div>
+            <span class="btn-text">Create Account</span>
+          </button>
+
+          <div class="auth-switch">
+            Already have an account? <a href="#" id="showLogin">Sign in</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div id="forgotPasswordForm" class="form-container">
+        <form class="auth-form fade-in">
+          <div class="form-header">
+            <h2>Reset Password</h2>
+            <p>Enter your email address and we'll send you a reset link</p>
+          </div>
+
+          <div id="resetSuccess" class="info-message">
+            Password reset email sent! Please check your inbox.
+          </div>
+
+          <div id="resetError" class="error-alert">
+          </div>
+
+          <div class="form-group">
+            <label for="resetEmail">Email Address</label>
+            <input type="email" id="resetEmail" name="email" required>
+            <div class="error-message">Please enter a valid email address</div>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <div class="loading-spinner"></div>
+            <span class="btn-text">Send Reset Link</span>
+          </button>
+
+          <div class="auth-switch">
+            Remember your password? <a href="#" id="backToLogin">Sign in</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // Supabase Configuration - Your Credentials
+    const supabaseUrl = 'https://qqqbpibgweewnwkmpmzn.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcWJwaWJnd2Vld253a21wbXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODkzNjEsImV4cCI6MjA3MTM2NTM2MX0.IgJn42y9ZEPZWT4bw0IfBYSuRSJ64DCUbebRGH75RLM';
+
+    // Initialize Supabase
+    const { createClient } = await import('https://cdn.skypack.dev/@supabase/supabase-js');
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const showSignupBtn = document.getElementById('showSignup');
+    const showLoginBtn = document.getElementById('showLogin');
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    const backToLoginLink = document.getElementById('backToLogin');
+
+    // Utility Functions
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validatePassword(password) {
+      return password.length >= 6;
+    }
+
+    function showError(formGroup, message) {
+      formGroup.classList.add('error');
+      const errorMsg = formGroup.querySelector('.error-message');
+      if (errorMsg && message) {
+        errorMsg.textContent = message;
+      }
+    }
+
+    function clearError(formGroup) {
+      formGroup.classList.remove('error');
+    }
+
+    function showMessage(elementId, message) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.textContent = message;
+        element.classList.add('show');
+      }
+    }
+
+    function hideMessage(elementId) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.classList.remove('show');
+      }
+    }
+
+    function setLoading(button, isLoading) {
+      if (isLoading) {
+        button.classList.add('loading');
+        button.disabled = true;
+      } else {
+        button.classList.remove('loading');
+        button.disabled = false;
+      }
+    }
+
+    // Password Toggle Functionality
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.password-toggle')) {
+        const toggleBtn = e.target.closest('.password-toggle');
+        const targetId = toggleBtn.getAttribute('data-target');
+        const passwordInput = document.getElementById(targetId);
+        const eyeOpen = toggleBtn.querySelector('.eye-open');
+        const eyeClosed = toggleBtn.querySelector('.eye-closed');
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          eyeOpen.style.display = 'none';
+          eyeClosed.style.display = 'block';
+        } else {
+          passwordInput.type = 'password';
+          eyeOpen.style.display = 'block';
+          eyeClosed.style.display = 'none';
+        }
+      }
+    });
+
+    // Form Switching
+    showSignupBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('signup');
+    });
+
+    showLoginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('login');
+    });
+
+    forgotPasswordLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('forgot');
+    });
+
+    backToLoginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToForm('login');
+    });
+
+    function switchToForm(formType) {
+      // Hide all forms
+      loginForm.classList.remove('active');
+      signupForm.classList.remove('active');
+      forgotPasswordForm.classList.remove('active');
+      
+      // Clear all messages
+      hideMessage('loginSuccess');
+      hideMessage('loginError');
+      hideMessage('signupSuccess');
+      hideMessage('signupError');
+      hideMessage('resetSuccess');
+      hideMessage('resetError');
+      
+      // Show selected form with animation
+      if (formType === 'signup') {
+        signupForm.classList.add('active');
+        signupForm.querySelector('.auth-form').classList.add('slide-in');
+      } else if (formType === 'login') {
+        loginForm.classList.add('active');
+        loginForm.querySelector('.auth-form').classList.add('slide-in');
+      } else if (formType === 'forgot') {
+        forgotPasswordForm.classList.add('active');
+        forgotPasswordForm.querySelector('.auth-form').classList.add('slide-in');
+      }
+    }
+
+    // Password Strength Checker
+    const signupPasswordInput = document.getElementById('signupPassword');
+    const passwordStrength = signupPasswordInput.parentNode.querySelector('.password-strength');
+    const strengthFill = passwordStrength.querySelector('.strength-fill');
+    const strengthLevel = passwordStrength.querySelector('.strength-level');
+
+    signupPasswordInput.addEventListener('input', (e) => {
+      const password = e.target.value;
+      const strength = calculatePasswordStrength(password);
+      
+      if (password.length > 0) {
+        passwordStrength.style.display = 'block';
+        updatePasswordStrength(strength);
+      } else {
+        passwordStrength.style.display = 'none';
+      }
+    });
+
+    function calculatePasswordStrength(password) {
+      let score = 0;
+      
+      if (password.length >= 8) score += 25;
+      if (password.length >= 12) score += 25;
+      if (/[a-z]/.test(password)) score += 10;
+      if (/[A-Z]/.test(password)) score += 10;
+      if (/[0-9]/.test(password)) score += 15;
+      if (/[^A-Za-z0-9]/.test(password)) score += 15;
+      
+      return Math.min(score, 100);
+    }
+
+    function updatePasswordStrength(strength) {
+      strengthFill.style.width = `${strength}%`;
+      
+      if (strength < 40) {
+        strengthFill.className = 'strength-fill strength-weak';
+        strengthLevel.textContent = 'Weak';
+      } else if (strength < 70) {
+        strengthFill.className = 'strength-fill strength-medium';
+        strengthLevel.textContent = 'Medium';
+      } else {
+        strengthFill.className = 'strength-fill strength-strong';
+        strengthLevel.textContent = 'Strong';
+      }
+    }
+
+    // Login Form Handler
+    loginForm.querySelector('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const submitBtn = e.target.querySelector('.submit-btn');
+      
+      // Clear previous errors
+      document.querySelectorAll('#loginForm .form-group').forEach(group => clearError(group));
+      hideMessage('loginError');
+      
+      // Validate inputs
+      let isValid = true;
+      
+      if (!validateEmail(email)) {
+        showError(document.getElementById('loginEmail').parentNode, 'Please enter a valid email address');
+        isValid = false;
+      }
+      
+      if (!password) {
+        showError(document.getElementById('loginPassword').parentNode, 'Password is required');
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      setLoading(submitBtn, true);
+      
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+        
+        if (error) throw error;
+        
+        // Success
+        showMessage('loginSuccess', 'Login successful! Redirecting...');
+        
+        setTimeout(() => {
+          // Redirect to dashboard - update this URL to your actual dashboard
+          window.location.href = '/dashboard.html';
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        let errorMessage = 'Login failed. Please try again.';
+        
+        if (error.message.includes('Invalid login credentials')) {
+          errorMessage = 'Invalid email or password. Please check your credentials.';
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Please verify your email address before logging in.';
+        }
+        
+        showMessage('loginError', errorMessage);
+      } finally {
+        setLoading(submitBtn, false);
+      }
+    });
+
+    // Signup Form Handler
+    signupForm.querySelector('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const agreeTerms = document.getElementById('agreeTerms').checked;
+      const submitBtn = e.target.querySelector('.submit-btn');
+      
+      // Clear previous errors
+      document.querySelectorAll('#signupForm .form-group').forEach(group => clearError(group));
+      hideMessage('signupError');
+      
+      // Validate inputs
+      let isValid = true;
+      
+      if (!name) {
+        showError(document.getElementById('signupName').parentNode, 'Full name is required');
+        isValid = false;
+      }
+      
+      if (!validateEmail(email)) {
+        showError(document.getElementById('signupEmail').parentNode, 'Please enter a valid email address');
+        isValid = false;
+      }
+      
+      if (!validatePassword(password)) {
+        showError(document.getElementById('signupPassword').parentNode, 'Password must be at least 6 characters long');
+        isValid = false;
+      }
+      
+      if (password !== confirmPassword) {
+        showError(document.getElementById('confirmPassword').parentNode, 'Passwords do not match');
+        isValid = false;
+      }
+      
+      if (!agreeTerms) {
+        alert('Please agree to the Terms & Conditions');
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      setLoading(submitBtn, true);
+      
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              full_name: name,
+              display_name: name
+            }
+          }
+        });
+        
+        if (error) throw error;
+        
+        // Success
+        showMessage('signupSuccess', 'Account created successfully! Please check your email to verify your account.');
+        
+        // Clear form
+        e.target.reset();
+        passwordStrength.style.display = 'none';
+        
+        // Clear all form errors
+        document.querySelectorAll('#signupForm .form-group').forEach(group => clearError(group));
+        
+      } catch (error) {
+        console.error('Signup error:', error);
+        let errorMessage = 'Failed to create account. Please try again.';
+        
+        if (error.message.includes('User already registered')) {
+          errorMessage = 'An account with this email already exists. Please sign in instead.';
+        } else if (error.message.includes('Password should be at least')) {
+          errorMessage = 'Password is too weak. Please choose a stronger password.';
+        }
+        
+        showMessage('signupError', errorMessage);
+      } finally {
+        setLoading(submitBtn, false);
+      }
+    });
+
+    // Forgot Password Form Handler
+    forgotPasswordForm.querySelector('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('resetEmail').value.trim();
+      const submitBtn = e.target.querySelector('.submit-btn');
+      
+      // Clear previous errors
+      document.querySelectorAll('#forgotPasswordForm .form-group').forEach(group => clearError(group));
+      hideMessage('resetError');
+      
+      // Validate email
+      if (!validateEmail(email)) {
+        showError(document.getElementById('resetEmail').parentNode, 'Please enter a valid email address');
+        return;
+      }
+      
+      setLoading(submitBtn, true);
+      
+      try {
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password.html`,
+        });
+        
+        if (error) throw error;
+        
+        // Success
+        showMessage('resetSuccess', 'Password reset email sent! Please check your inbox and spam folder.');
+        
+        // Clear form
+        e.target.reset();
+        
+      } catch (error) {
+        console.error('Reset password error:', error);
+        showMessage('resetError', error.message || 'Failed to send reset email. Please try again.');
+      } finally {
+        setLoading(submitBtn, false);
+      }
+    });
+
+    // Real-time Input Validation
+    document.addEventListener('input', (e) => {
+      if (e.target.matches('input[type="email"]')) {
+        const formGroup = e.target.parentNode;
+        if (e.target.value && !validateEmail(e.target.value)) {
+          showError(formGroup);
+        } else {
+          clearError(formGroup);
+        }
+      }
+      
+      if (e.target.matches('input[type="password"]')) {
+        const formGroup = e.target.parentNode;
+        if (e.target.value && e.target.id !== 'confirmPassword' && !validatePassword(e.target.value)) {
+          showError(formGroup);
+        } else if (e.target.id === 'confirmPassword') {
+          const password = document.getElementById('signupPassword').value;
+          if (e.target.value && e.target.value !== password) {
+            showError(formGroup);
+          } else {
+            clearError(formGroup);
+          }
+        } else {
+          clearError(formGroup);
+        }
+      }
+    });
+
+    // Authentication State Management
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session?.user?.email);
+      
+      if (event === 'SIGNED_IN') {
+        console.log('User signed in successfully:', session.user);
+        // You can add additional logic here like updating UI or redirecting
+      } else if (event === 'SIGNED_OUT') {
+        console.log('User signed out');
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log('Token refreshed');
+      }
+    });
+
+    // Check if user is already logged in
+    const checkSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Session error:', error);
+          return;
+        }
+        
+        if (session) {
+          console.log('User already logged in:', session.user.email);
+          // Optionally redirect to dashboard if user is already logged in
+          // window.location.href = '/dashboard.html';
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+      }
+    };
+
+    // Initialize session check
+    checkSession();
+
+    // Clear form errors when switching forms
+    document.addEventListener('click', (e) => {
+      if (e.target.matches('#showSignup, #showLogin, #forgotPasswordLink, #backToLogin')) {
+        // Clear all form errors when switching
+        setTimeout(() => {
+          document.querySelectorAll('.form-group.error').forEach(group => clearError(group));
+        }, 100);
+      }
+    });
+
+    console.log('🚀 HomeGo Authentication System Initialized');
+    console.log('📧 Supabase URL:', supabaseUrl);
+    console.log('✅ Authentication ready for:', window.location.hostname);
+
+  </script>
+</body>
+</html>
