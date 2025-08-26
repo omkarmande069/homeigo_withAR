@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase Connection Test - HomeGo</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f9fafb;
+    }
+    .test-container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .status {
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-weight: 500;
+    }
+    .success { background: #ecfdf5; color: #065f46; border: 1px solid #10b981; }
+    .error { background: #fef2f2; color: #dc2626; border: 1px solid #ef4444; }
+    .info { background: #eff6ff; color: #1e40af; border: 1px solid #3b82f6; }
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+    }
+    button {
+      background: #f59e0b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover { background: #d97706; }
+    input {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      margin: 5px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🔧 Supabase Connection Test</h1>
+    <p>Testing HomeGo's Supabase authentication system...</p>
+    
+    <div id="connectionStatus" class="status info">Testing connection...</div>
+    
+    <div class="test-section">
+      <h3>📡 Connection Test</h3>
+      <div id="configStatus"></div>
+      <div id="supabaseStatus"></div>
+    </div>
+    
+    <div class="test-section">
+      <h3>🔐 Authentication Test</h3>
+      <div id="authStatus"></div>
+      <div id="currentUser"></div>
+    </div>
+    
+    <div class="test-section">
+      <h3>🧪 Quick Tests</h3>
+      <button onclick="testSignUp()">Test Sign Up</button>
+      <button onclick="testSignIn()">Test Sign In</button>
+      <button onclick="testSignOut()">Test Sign Out</button>
+      <button onclick="checkSession()">Check Session</button>
+    </div>
+    
+    <div class="test-section">
+      <h3>📝 Test Credentials</h3>
+      <input type="email" id="testEmail" placeholder="test@example.com" value="test@example.com">
+      <input type="password" id="testPassword" placeholder="password" value="testpassword123">
+    </div>
+  </div>
+
+  <script type="module">
+    // Load configuration
+    await import('./config.js');
+    
+    // Initialize Supabase
+    const { createClient } = await import('https://cdn.skypack.dev/@supabase/supabase-js');
+    const supabase = createClient(window.config.supabase.url, window.config.supabase.anonKey);
+    
+    // Test results
+    let testResults = {
+      config: false,
+      supabase: false,
+      auth: false
+    };
+    
+    // Update status display
+    function updateStatus(elementId, message, type = 'info') {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.className = `status ${type}`;
+    }
+    
+    // Test configuration
+    function testConfig() {
+      try {
+        if (window.config && window.config.supabase) {
+          updateStatus('configStatus', `✅ Config loaded - URL: ${window.config.supabase.url.substring(0, 30)}...`, 'success');
+          testResults.config = true;
+        } else {
+          updateStatus('configStatus', '❌ Config not found', 'error');
+        }
+      } catch (error) {
+        updateStatus('configStatus', `❌ Config error: ${error.message}`, 'error');
+      }
+    }
+    
+    // Test Supabase connection
+    async function testSupabase() {
+      try {
+        // Test basic connection
+        const { data, error } = await supabase.from('_dummy_table_').select('*').limit(1);
+        
+        // We expect an error for non-existent table, but it means connection works
+        if (error && error.message.includes('does not exist')) {
+          updateStatus('supabaseStatus', '✅ Supabase connection successful', 'success');
+          testResults.supabase = true;
+        } else if (error) {
+          updateStatus('supabaseStatus', `❌ Supabase error: ${error.message}`, 'error');
+        } else {
+          updateStatus('supabaseStatus', '✅ Supabase connection successful', 'success');
+          testResults.supabase = true;
+        }
+      } catch (error) {
+        updateStatus('supabaseStatus', `❌ Connection failed: ${error.message}`, 'error');
+      }
+    }
+    
+    // Test authentication
+    async function testAuth() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          updateStatus('authStatus', `❌ Auth error: ${error.message}`, 'error');
+        } else {
+          updateStatus('authStatus', '✅ Authentication system ready', 'success');
+          testResults.auth = true;
+          
+          if (session) {
+            document.getElementById('currentUser').innerHTML = `
+              <div class="status success">
+                👤 Logged in as: ${session.user.email}
+              </div>
+            `;
+          } else {
+            document.getElementById('currentUser').innerHTML = `
+              <div class="status info">
+                👤 No active session
+              </div>
+            `;
+          }
+        }
+      } catch (error) {
+        updateStatus('authStatus', `❌ Auth test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    // Test functions for buttons
+    window.testSignUp = async () => {
+      const email = document.getElementById('testEmail').value;
+      const password = document.getElementById('testPassword').value;
+      
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password
+        });
+        
+        if (error) {
+          alert(`Sign up error: ${error.message}`);
+        } else {
+          alert('Sign up successful! Check your email for verification.');
+          checkSession();
+        }
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    };
+    
+    window.testSignIn = async () => {
+      const email = document.getElementById('testEmail').value;
+      const password = document.getElementById('testPassword').value;
+      
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+        
+        if (error) {
+          alert(`Sign in error: ${error.message}`);
+        } else {
+          alert('Sign in successful!');
+          checkSession();
+        }
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    };
+    
+    window.testSignOut = async () => {
+      try {
+        const { error } = await supabase.auth.signOut();
+        
+        if (error) {
+          alert(`Sign out error: ${error.message}`);
+        } else {
+          alert('Sign out successful!');
+          checkSession();
+        }
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    };
+    
+    window.checkSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          alert(`Session error: ${error.message}`);
+        } else if (session) {
+          alert(`Active session for: ${session.user.email}`);
+        } else {
+          alert('No active session');
+        }
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    };
+    
+    // Listen for auth state changes
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session?.user?.email);
+      checkSession();
+    });
+    
+    // Run all tests
+    async function runTests() {
+      testConfig();
+      await testSupabase();
+      await testAuth();
+      
+      // Update overall status
+      const allPassed = testResults.config && testResults.supabase && testResults.auth;
+      if (allPassed) {
+        updateStatus('connectionStatus', '✅ All tests passed! Supabase is working correctly.', 'success');
+      } else {
+        updateStatus('connectionStatus', '❌ Some tests failed. Check the details above.', 'error');
+      }
+    }
+    
+    // Initialize tests
+    runTests();
+    
+    console.log('🧪 Supabase Test Page Loaded');
+  </script>
+</body>
+</html>

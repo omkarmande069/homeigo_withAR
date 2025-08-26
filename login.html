@@ -629,9 +629,12 @@
   </div>
 
   <script type="module">
-    // Supabase Configuration - Your Credentials
-    const supabaseUrl = 'https://qqqbpibgweewnwkmpmzn.supabase.co';
-    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcWJwaWJnd2Vld253a21wbXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODkzNjEsImV4cCI6MjA3MTM2NTM2MX0.IgJn42y9ZEPZWT4bw0IfBYSuRSJ64DCUbebRGH75RLM';
+    // Load configuration first
+    await import('./config.js');
+    
+    // Use centralized configuration
+    const supabaseUrl = window.config.supabase.url;
+    const supabaseAnonKey = window.config.supabase.anonKey;
 
     // Initialize Supabase
     const { createClient } = await import('https://cdn.skypack.dev/@supabase/supabase-js');

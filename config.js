@@ -2,8 +2,8 @@
 const config = {
   // Supabase Configuration
   supabase: {
-    url: 'https://your-project.supabase.co', // Replace with your Supabase URL
-    anonKey: 'your-anon-key' // Replace with your Supabase anon key
+    url: 'https://qqqbpibgweewnwkmpmzn.supabase.co', // Your actual Supabase URL
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcWJwaWJnd2Vld253a21wbXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODkzNjEsImV4cCI6MjA3MTM2NTM2MX0.IgJn42y9ZEPZWT4bw0IfBYSuRSJ64DCUbebRGH75RLM' // Your actual Supabase anon key
   },
   
   // App Configuration
