@@ -181,7 +181,10 @@
       try {
         const { data, error } = await supabase.auth.signUp({
           email: email,
-          password: password
+          password: password,
+          options: {
+            emailConfirm: false // Disable email confirmation for testing
+          }
         });
         
         if (error) {
