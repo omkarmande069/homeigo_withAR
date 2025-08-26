@@ -81,7 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
     navigationEl.innerHTML = `
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
           <button data-page="home" class="nav-link text-2xl font-bold text-amber-600">HomeGo</button>
+          
+          <!-- Desktop Navigation -->
           <div class="hidden md:flex items-center space-x-8">
             <button data-page="home" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Home</button>
             <button data-page="products" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Products</button>
@@ -89,8 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <button data-page="contact" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Contact</button>
             ${!isLoggedIn ? '<a href="login.html" data-login-link class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Login</a>' : ''}
           </div>
-          <div class="flex items-center space-x-4">
-            <div class="relative hidden md:block">
+          
+          <!-- Desktop Search and Actions -->
+          <div class="hidden md:flex items-center space-x-4">
+            <div class="relative">
               <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
               <input id="search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500">
             </div>
@@ -99,14 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
               ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-amber-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">${getCartCount()}</span>` : ''}
             </button>
             
-            <!-- User Menu -->
+            <!-- Desktop User Menu -->
             ${isLoggedIn ? `
               <div class="relative">
                 <button data-user-button class="flex items-center space-x-2 p-2 text-gray-700 hover:text-amber-600 transition-colors">
                   <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
                     ${userName.charAt(0).toUpperCase()}
                   </div>
-                  <span class="hidden md:block text-sm text-gray-700">${userName}</span>
+                  <span class="text-sm text-gray-700">${userName}</span>
                   <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
                 </button>
                 
@@ -128,6 +133,62 @@ document.addEventListener('DOMContentLoaded', () => {
               <button class="p-2 text-gray-700 hover:text-amber-600 transition-colors">
                 <i data-lucide="user" class="w-5 h-5"></i>
               </button>
+            `}
+          </div>
+          
+          <!-- Mobile Actions -->
+          <div class="flex md:hidden items-center space-x-2">
+            <button data-page="cart" class="nav-link p-2 text-gray-700 hover:text-amber-600 transition-colors relative">
+              <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+              ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-amber-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">${getCartCount()}</span>` : ''}
+            </button>
+            <button data-mobile-menu-button class="p-2 text-gray-700 hover:text-amber-600 transition-colors">
+              <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div data-mobile-menu class="md:hidden hidden border-t border-gray-200 bg-white">
+          <div class="px-4 py-4 space-y-4">
+            <!-- Mobile Search -->
+            <div class="relative">
+              <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+              <input id="mobile-search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
+            
+            <!-- Mobile Navigation Links -->
+            <div class="space-y-2">
+              <button data-page="home" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">Home</button>
+              <button data-page="products" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">Products</button>
+              <button data-page="about" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">About</button>
+              <button data-page="contact" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">Contact</button>
+            </div>
+            
+            <!-- Mobile User Section -->
+            ${isLoggedIn ? `
+              <div class="border-t border-gray-200 pt-4">
+                <div class="flex items-center space-x-3 px-4 py-2">
+                  <div class="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    ${userName.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <div class="font-medium text-gray-900">${userName}</div>
+                    <div class="text-sm text-gray-500">${sessionManager.getUserEmail()}</div>
+                  </div>
+                </div>
+                <div class="space-y-1 mt-3">
+                  <a href="dashboard.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Dashboard</a>
+                  <a href="#" data-page="profile" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Profile</a>
+                  <a href="#" data-page="orders" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">My Orders</a>
+                  <a href="#" data-page="wishlist" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Wishlist</a>
+                  <button data-logout class="block w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50 rounded-lg">Sign Out</button>
+                </div>
+              </div>
+            ` : `
+              <div class="border-t border-gray-200 pt-4">
+                <a href="login.html" data-login-link class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Login</a>
+              </div>
             `}
           </div>
         </div>
@@ -156,6 +217,40 @@ document.addEventListener('DOMContentLoaded', () => {
       logoutButton.addEventListener('click', async (e) => {
         e.preventDefault();
         await sessionManager.logout();
+      });
+    }
+    
+    // Add event listeners for mobile menu
+    const mobileMenuButton = navigationEl.querySelector('[data-mobile-menu-button]');
+    const mobileMenu = navigationEl.querySelector('[data-mobile-menu]');
+    
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+      
+      // Close mobile menu when clicking on nav links
+      const mobileNavLinks = mobileMenu.querySelectorAll('.nav-link');
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    }
+    
+    // Handle mobile search input
+    const mobileSearchInput = navigationEl.querySelector('#mobile-search-input');
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('input', (e) => {
+        state.searchQuery = e.target.value;
+        // You can add search functionality here
       });
     }
   };
