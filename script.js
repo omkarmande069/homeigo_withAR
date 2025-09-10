@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const state = {
     currentPage: 'home',
     cartItems: [
-      { id: 1, name: 'Modern Sofa', price: 899, quantity: 1, image: 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1' },
-      { id: 2, name: 'Coffee Table', price: 299, quantity: 2, image: 'https://images.pexels.com/photos/2082090/pexels-photo-2082090.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1' }
+      { id: 1, name: 'KLIPPAN', description: '3-seat sofa', price: 299, quantity: 1, image: 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1' },
+      { id: 2, name: 'FROSTA', description: 'Stool/side table', price: 25, quantity: 2, image: 'https://images.pexels.com/photos/2082090/pexels-photo-2082090.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1' }
     ],
     searchQuery: '',
     selectedCategory: 'all',
@@ -15,12 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     arMode: false,
     selectedProduct: null,
     products: [
-      { id: 1, name: 'Modern Sectional Sofa', price: 1299, category: 'sofas', rating: 4.8, image: 'https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: true },
-      { id: 2, name: 'Minimalist Coffee Table', price: 399, category: 'tables', rating: 4.6, image: 'https://images.pexels.com/photos/3148452/pexels-photo-3148452.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: true },
-      { id: 3, name: 'Queen Platform Bed', price: 899, category: 'bedroom', rating: 4.9, image: 'https://images.pexels.com/photos/6480198/pexels-photo-6480198.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: false },
-      { id: 4, name: 'Arc Floor Lamp', price: 189, category: 'lighting', rating: 4.7, image: 'https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: true },
-      { id: 5, name: 'Dining Table Set', price: 799, category: 'tables', rating: 4.5, image: 'https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: false },
-      { id: 6, name: 'Accent Chair', price: 449, category: 'sofas', rating: 4.4, image: 'https://images.pexels.com/photos/2762247/pexels-photo-2762247.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: false }
+      { id: 1, name: 'KLIPPAN', description: '3-seat sofa', price: 299, category: 'sofas', rating: 4.8, image: 'https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: true },
+      { id: 2, name: 'FROSTA', description: 'Stool/side table', price: 25, category: 'tables', rating: 4.6, image: 'https://images.pexels.com/photos/3148452/pexels-photo-3148452.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: true },
+      { id: 3, name: 'MALM', description: 'Bed frame, high', price: 199, category: 'bedroom', rating: 4.9, image: 'https://images.pexels.com/photos/6480198/pexels-photo-6480198.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: false },
+      { id: 4, name: 'FOTO', description: 'Floor lamp', price: 49, category: 'lighting', rating: 4.7, image: 'https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: true },
+      { id: 5, name: 'NORDEN', description: 'Gateleg table', price: 299, category: 'tables', rating: 4.5, image: 'https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: false },
+      { id: 6, name: 'POÄNG', description: 'Armchair', price: 99, category: 'sofas', rating: 4.4, image: 'https://images.pexels.com/photos/2762247/pexels-photo-2762247.jpeg?auto=compress&cs=tinysrgb&w=300&h=250&dpr=1', featured: false }
     ],
   };
 
@@ -82,33 +82,35 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <!-- Logo -->
-          <button data-page="home" class="nav-link text-2xl font-bold text-amber-600">HomeGo</button>
+          <button data-page="home" class="nav-link text-2xl font-bold text-ikea-blue flex items-center space-x-2">
+            <div class="bg-ikea-blue text-white px-3 py-1 rounded text-lg font-black">HEMKÄNSLA</div>
+          </button>
           
           <!-- Desktop Navigation -->
           <div class="hidden md:flex items-center space-x-8">
-            <button data-page="home" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Home</button>
-            <button data-page="products" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Products</button>
-            <button data-page="about" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">About</button>
-            <button data-page="contact" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Contact</button>
-            ${!isLoggedIn ? '<a href="login.html" data-login-link class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Login</a>' : ''}
+            <button data-page="home" class="nav-link text-gray-700 hover:text-ikea-blue transition-colors">Home</button>
+            <button data-page="products" class="nav-link text-gray-700 hover:text-ikea-blue transition-colors">Products</button>
+            <button data-page="about" class="nav-link text-gray-700 hover:text-ikea-blue transition-colors">About</button>
+            <button data-page="contact" class="nav-link text-gray-700 hover:text-ikea-blue transition-colors">Contact</button>
+            ${!isLoggedIn ? '<a href="login.html" data-login-link class="nav-link text-gray-700 hover:text-ikea-blue transition-colors">Login</a>' : ''}
           </div>
           
           <!-- Desktop Search and Actions -->
           <div class="hidden md:flex items-center space-x-4">
             <div class="relative">
               <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
-              <input id="search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500">
+              <input id="search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-ikea-blue focus:border-ikea-blue">
             </div>
-            <button data-page="cart" class="nav-link p-2 text-gray-700 hover:text-amber-600 transition-colors relative">
+            <button data-page="cart" class="nav-link p-2 text-gray-700 hover:text-ikea-blue transition-colors relative">
               <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-              ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-amber-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">${getCartCount()}</span>` : ''}
+              ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-ikea-yellow text-black rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">${getCartCount()}</span>` : ''}
             </button>
             
             <!-- Desktop User Menu -->
             ${isLoggedIn ? `
               <div class="relative">
-                <button data-user-button class="flex items-center space-x-2 p-2 text-gray-700 hover:text-amber-600 transition-colors">
-                  <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                <button data-user-button class="flex items-center space-x-2 p-2 text-gray-700 hover:text-ikea-blue transition-colors">
+                  <div class="w-8 h-8 bg-ikea-blue rounded-full flex items-center justify-center text-white text-sm font-medium">
                     ${userName.charAt(0).toUpperCase()}
                   </div>
                   <span class="text-sm text-gray-700">${userName}</span>
@@ -130,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               </div>
             ` : `
-              <button class="p-2 text-gray-700 hover:text-amber-600 transition-colors">
+              <button class="p-2 text-gray-700 hover:text-ikea-blue transition-colors">
                 <i data-lucide="user" class="w-5 h-5"></i>
               </button>
             `}
@@ -138,11 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
           
           <!-- Mobile Actions -->
           <div class="flex md:hidden items-center space-x-2">
-            <button data-page="cart" class="nav-link p-2 text-gray-700 hover:text-amber-600 transition-colors relative">
+            <button data-page="cart" class="nav-link p-2 text-gray-700 hover:text-ikea-blue transition-colors relative">
               <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-              ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-amber-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">${getCartCount()}</span>` : ''}
+              ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-ikea-yellow text-black rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">${getCartCount()}</span>` : ''}
             </button>
-            <button data-mobile-menu-button class="p-2 text-gray-700 hover:text-amber-600 transition-colors">
+            <button data-mobile-menu-button class="p-2 text-gray-700 hover:text-ikea-blue transition-colors">
               <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
           </div>
@@ -154,22 +156,22 @@ document.addEventListener('DOMContentLoaded', () => {
             <!-- Mobile Search -->
             <div class="relative">
               <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
-              <input id="mobile-search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+              <input id="mobile-search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ikea-blue focus:border-ikea-blue">
             </div>
             
             <!-- Mobile Navigation Links -->
             <div class="space-y-2">
-              <button data-page="home" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">Home</button>
-              <button data-page="products" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">Products</button>
-              <button data-page="about" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">About</button>
-              <button data-page="contact" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors">Contact</button>
+              <button data-page="home" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-ikea-blue hover:bg-blue-50 rounded-lg transition-colors">Home</button>
+              <button data-page="products" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-ikea-blue hover:bg-blue-50 rounded-lg transition-colors">Products</button>
+              <button data-page="about" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-ikea-blue hover:bg-blue-50 rounded-lg transition-colors">About</button>
+              <button data-page="contact" class="nav-link w-full text-left px-4 py-3 text-gray-700 hover:text-ikea-blue hover:bg-blue-50 rounded-lg transition-colors">Contact</button>
             </div>
             
             <!-- Mobile User Section -->
             ${isLoggedIn ? `
               <div class="border-t border-gray-200 pt-4">
                 <div class="flex items-center space-x-3 px-4 py-2">
-                  <div class="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  <div class="w-10 h-10 bg-ikea-blue rounded-full flex items-center justify-center text-white text-sm font-medium">
                     ${userName.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -178,16 +180,16 @@ document.addEventListener('DOMContentLoaded', () => {
                   </div>
                 </div>
                 <div class="space-y-1 mt-3">
-                  <a href="dashboard.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Dashboard</a>
-                  <a href="#" data-page="profile" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Profile</a>
-                  <a href="#" data-page="orders" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">My Orders</a>
-                  <a href="#" data-page="wishlist" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Wishlist</a>
-                  <button data-logout class="block w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50 rounded-lg">Sign Out</button>
+                  <a href="dashboard.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg">Dashboard</a>
+                  <a href="#" data-page="profile" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg">Profile</a>
+                  <a href="#" data-page="orders" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg">My Orders</a>
+                  <a href="#" data-page="wishlist" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg">Wishlist</a>
+                  <button data-logout class="block w-full text-left px-4 py-3 text-red-600 hover:bg-blue-50 rounded-lg">Sign Out</button>
                 </div>
               </div>
             ` : `
               <div class="border-t border-gray-200 pt-4">
-                <a href="login.html" data-login-link class="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">Login</a>
+                <a href="login.html" data-login-link class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg">Login</a>
               </div>
             `}
           </div>
@@ -258,13 +260,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const renderHomePage = () => {
     const featuredProducts = state.products.filter(p => p.featured);
     homePageEl.innerHTML = `
-      <section class="bg-gradient-to-br from-amber-50 to-orange-50 py-20">
+      <section class="bg-gradient-to-br from-blue-50 to-ikea-blue/10 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 class="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">Transform Your <span class="text-amber-600 block">Home Today</span></h1>
-              <p class="text-xl text-gray-600 mb-8 leading-relaxed">Discover premium furniture that combines style, comfort, and functionality.</p>
-              <button data-page="products" class="nav-link bg-amber-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-700 transition-colors">Shop Collection</button>
+              <h1 class="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">The wonderful <span class="text-ikea-blue block">everyday</span></h1>
+              <p class="text-xl text-gray-600 mb-8 leading-relaxed">We believe everyone deserves a beautiful home. Discover affordable, functional furniture designed for real life.</p>
+              <button data-page="products" class="nav-link bg-ikea-yellow text-black px-8 py-4 rounded-lg text-lg font-bold uppercase tracking-wide hover:bg-ikea-yellow-dark transition-colors">Shop Now</button>
             </div>
             <div><img src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600&h=500&dpr=1" alt="Modern living room" class="rounded-3xl shadow-2xl"></div>
           </div>
@@ -283,9 +285,10 @@ document.addEventListener('DOMContentLoaded', () => {
                   </button>
                 </div>
                 <div class="p-6">
-                  <h3 class="text-xl font-semibold text-gray-900 mb-2">${product.name}</h3>
-                  <p class="text-2xl font-bold text-amber-600 mb-4">$${product.price}</p>
-                  <button class="w-full bg-gray-900 text-white py-3 rounded-full hover:bg-gray-800 transition-colors font-semibold">View Details</button>
+                  <h3 class="text-xl font-bold text-gray-900 mb-1 uppercase tracking-wide">${product.name}</h3>
+                  <p class="text-sm text-gray-600 mb-3">${product.description}</p>
+                  <p class="text-2xl font-bold text-ikea-blue mb-4">$${product.price}</p>
+                  <button class="w-full bg-ikea-yellow text-black py-3 rounded-lg hover:bg-ikea-yellow-dark transition-colors font-bold uppercase tracking-wide">Add to Cart</button>
                 </div>
               </div>
             `).join('')}
@@ -316,8 +319,9 @@ document.addEventListener('DOMContentLoaded', () => {
                   </button>
                 </div>
                 <div class="p-4">
-                  <h3 class="font-semibold text-gray-900 mb-2">${product.name}</h3>
-                  <p class="text-lg font-bold text-amber-600">$${product.price}</p>
+                  <h3 class="font-bold text-gray-900 mb-1 uppercase tracking-wide">${product.name}</h3>
+                  <p class="text-xs text-gray-600 mb-2">${product.description}</p>
+                  <p class="text-lg font-bold text-ikea-blue">$${product.price}</p>
                 </div>
               </div>
             `).join('')}
@@ -350,15 +354,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="bg-white p-6 rounded-2xl shadow-md flex items-center space-x-4">
                   <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg">
                   <div class="flex-1">
-                    <h3 class="font-semibold text-gray-900">${item.name}</h3>
-                    <p class="text-gray-600">$${item.price}</p>
+                    <h3 class="font-bold text-gray-900 uppercase tracking-wide">${item.name}</h3>
+                    <p class="text-sm text-gray-600">${item.description || ''}</p>
+                    <p class="text-gray-600 font-medium">$${item.price}</p>
                   </div>
                   <div class="flex items-center space-x-3">
                     <button data-item-id="${item.id}" data-change="-1" class="cart-quantity-btn p-1 rounded-full bg-gray-100 hover:bg-gray-200"><i data-lucide="minus" class="w-4 h-4"></i></button>
                     <span class="font-semibold">${item.quantity}</span>
                     <button data-item-id="${item.id}" data-change="1" class="cart-quantity-btn p-1 rounded-full bg-gray-100 hover:bg-gray-200"><i data-lucide="plus" class="w-4 h-4"></i></button>
                   </div>
-                  <p class="font-bold text-lg text-amber-600">$${item.price * item.quantity}</p>
+                  <p class="font-bold text-lg text-ikea-blue">$${item.price * item.quantity}</p>
                 </div>
               `).join('')}
               <div class="text-right">
@@ -376,8 +381,22 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-16">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">About HomeGo</h1>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">We're passionate about helping you create beautiful, functional spaces.</p>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">About HEMKÄNSLA</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">We believe everyone deserves a beautiful home. Our Swedish-inspired furniture combines functionality with timeless design, making quality furniture accessible to everyone.</p>
+            <div class="mt-12 grid md:grid-cols-3 gap-8 text-left">
+              <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3 class="text-lg font-bold text-ikea-blue mb-3 uppercase">Democratic Design</h3>
+                <p class="text-gray-600">Beautiful, functional, sustainable, high quality and affordable. These five dimensions guide everything we do.</p>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3 class="text-lg font-bold text-ikea-blue mb-3 uppercase">Sustainability</h3>
+                <p class="text-gray-600">We're committed to using renewable and recycled materials, and helping customers live more sustainably at home.</p>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3 class="text-lg font-bold text-ikea-blue mb-3 uppercase">For Everyone</h3>
+                <p class="text-gray-600">We create solutions for people with different needs, tastes, dreams, aspirations and wallets.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -388,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     contactPageEl.innerHTML = `
       <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">Contact Us</h1>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">Contact HEMKÄNSLA</h1>
           <div class="max-w-2xl mx-auto">
             <form class="space-y-6">
               <div>
@@ -403,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
                 <textarea rows="5" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
               </div>
-              <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold">Send Message</button>
+              <button type="submit" class="w-full bg-ikea-yellow text-black py-3 rounded-lg font-bold uppercase tracking-wide hover:bg-ikea-yellow-dark transition-colors">Send Message</button>
             </form>
           </div>
         </div>
@@ -414,9 +433,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const renderFooter = () => {
     footerEl.innerHTML = `
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h3 class="text-2xl font-bold text-amber-400 mb-4">HomeGo</h3>
-        <p class="text-gray-300 mb-4">Transform your house into a home.</p>
-        <p class="text-gray-400">&copy; 2025 HomeGo. All rights reserved.</p>
+        <h3 class="text-2xl font-bold text-ikea-yellow mb-4">HEMKÄNSLA</h3>
+        <p class="text-gray-300 mb-4">Swedish furniture for everyone.</p>
+        <p class="text-gray-400">&copy; 2025 HEMKÄNSLA. All rights reserved.</p>
       </div>
     `;
   };
@@ -538,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
           <div class="flex space-x-3">
-            <button class="flex-1 bg-amber-600 text-white py-3 rounded-full font-semibold hover:bg-amber-700 transition-colors">Add to Cart</button>
+            <button class="flex-1 bg-ikea-blue text-white py-3 rounded-full font-semibold hover:bg-ikea-blue-dark transition-colors">Add to Cart</button>
             <button class="bg-white bg-opacity-20 backdrop-blur-sm rounded-full p-3 text-white hover:bg-opacity-30 transition-all"><i data-lucide="camera" class="w-5 h-5"></i></button>
           </div>
         </div>
