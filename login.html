@@ -628,17 +628,10 @@
     </div>
   </div>
 
-  <script type="module">
-    // Load configuration first
-    await import('./config.js');
-    
-    // Use centralized configuration
-    const supabaseUrl = window.config.supabase.url;
-    const supabaseAnonKey = window.config.supabase.anonKey;
-
-    // Initialize Supabase
-    const { createClient } = await import('https://cdn.skypack.dev/@supabase/supabase-js');
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  <script src="session.js"></script>
+  <script>
+    // Initialize SessionManager
+    const sessionManager = new SessionManager();
 
     // DOM Elements
     const loginForm = document.getElementById('loginForm');
@@ -840,19 +833,22 @@
       setLoading(submitBtn, true);
       
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
-        });
+        console.log('Starting login process...');
         
-        if (error) throw error;
+        const response = await sessionManager.login(email, password);
+        console.log('Login response:', response);
         
         // Success
         showMessage('loginSuccess', 'Login successful! Redirecting...');
         
+        // Set session in SessionManager
+        sessionManager.currentUser = data.user;
+        sessionManager.isAuthenticated = true;
+        sessionManager.onAuthStateChange('SIGNED_IN', data.session);
+        
         setTimeout(() => {
-          // Redirect to dashboard
-          window.location.href = 'dashboard.html';
+          // Redirect to home page
+          window.location.href = 'index.html';
         }, 2000);
         
       } catch (error) {
@@ -919,21 +915,10 @@
       setLoading(submitBtn, true);
       
       try {
-        const { data, error } = await supabase.auth.signUp({
-          email: email,
-          password: password,
-          options: {
-            data: {
-              full_name: name,
-              display_name: name
-            },
-            emailRedirectTo: `${window.location.origin}/login.html`,
-            // Disable email confirmation for now
-            emailConfirm: false
-          }
-        });
+        console.log('Starting signup process...');
         
-        if (error) throw error;
+        const response = await sessionManager.register(email, password, name);
+        console.log('Signup response:', response);
         
         // Success
         showMessage('signupSuccess', 'Account created successfully! Please check your email to verify your account.');
@@ -981,9 +966,8 @@
       setLoading(submitBtn, true);
       
       try {
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/reset-password.html`,
-        });
+        // For now, we'll just show a message since password reset requires email setup
+        showMessage('resetSuccess', 'Please contact support to reset your password.');
         
         if (error) throw error;
         
@@ -1029,37 +1013,12 @@
       }
     });
 
-    // Authentication State Management
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event, session?.user?.email);
-      
-      if (event === 'SIGNED_IN') {
-        console.log('User signed in successfully:', session.user);
-        // You can add additional logic here like updating UI or redirecting
-      } else if (event === 'SIGNED_OUT') {
-        console.log('User signed out');
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log('Token refreshed');
-      }
-    });
-
     // Check if user is already logged in
     const checkSession = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Session error:', error);
-          return;
-        }
-        
-        if (session) {
-          console.log('User already logged in:', session.user.email);
-          // Optionally redirect to dashboard if user is already logged in
-          // window.location.href = '/dashboard.html';
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
+      const isAuthenticated = await sessionManager.checkAuth();
+      if (isAuthenticated) {
+        // If already logged in, redirect to home page
+        window.location.href = 'index.html';
       }
     };
 

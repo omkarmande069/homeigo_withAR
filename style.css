@@ -1,59 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-
 body {
   font-family: 'Inter', sans-serif;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
 .hidden {
   display: none;
-}
-
-/* Mobile Navigation Enhancements */
-[data-mobile-menu] {
-  transition: all 0.3s ease-in-out;
-}
-
-[data-mobile-menu].hidden {
-  max-height: 0;
-  overflow: hidden;
-}
-
-[data-mobile-menu]:not(.hidden) {
-  max-height: 500px;
-}
-
-/* Smooth transitions for mobile menu items */
-[data-mobile-menu] .nav-link {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Ensure proper spacing on mobile */
-@media (max-width: 768px) {
-  .nav-link {
-    padding: 0.75rem 1rem;
-  }
-  
-  /* Make sure the mobile menu doesn't interfere with page content */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-}
-
-/* Improve touch targets on mobile */
-@media (max-width: 768px) {
-  button, a {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Ensure proper spacing for mobile menu items */
-  [data-mobile-menu] .space-y-2 > * {
-    margin-bottom: 0.5rem;
-  }
-  
-  [data-mobile-menu] .space-y-1 > * {
-    margin-bottom: 0.25rem;
-  }
 }
