@@ -1,14 +1,20 @@
 [
   {
+    "email": "omkar@homeigo.com",
+    "password": "password123",
+    "full_name": "Omkar",
+    "user_type": "seller"
+  },
+  {
     "email": "test@example.com",
     "password": "testpassword123",
-    "full_name": "Test User"
+    "full_name": "Test User",
+    "user_type": "customer"
   },
   {
     "email": "jane@homego.dev",
     "password": "Password!234",
-    "full_name": "Jane Doe"
+    "full_name": "Jane Doe",
+    "user_type": "customer"
   }
 ]
-
-

@@ -81,14 +81,14 @@ class SessionManager {
         }
     }
 
-    async register(email, password, fullName) {
+    async register(email, password, fullName, userType = 'customer') {
         try {
             const response = await fetch('http://localhost:3000/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password, fullName })
+                body: JSON.stringify({ email, password, fullName, userType })
             });
 
             const data = await response.json();
@@ -132,6 +132,10 @@ class SessionManager {
 
     getUserName() {
         return this.currentUser?.fullName || 'User';
+    }
+    
+    getUserType() {
+        return this.currentUser?.userType || 'customer';
     }
 
     onAuthStateChange(event, session) {

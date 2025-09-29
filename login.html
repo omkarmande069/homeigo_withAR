@@ -474,6 +474,14 @@
           </div>
 
           <div class="form-group">
+            <label for="loginUserType">I am a:</label>
+            <select id="loginUserType" name="userType" class="w-full p-4 border-2 border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-amber-500 transition-colors">
+              <option value="customer">Customer</option>
+              <option value="seller">Seller</option>
+            </select>
+          </div>
+
+          <div class="form-group">
             <label for="loginEmail">Email Address</label>
             <input type="email" id="loginEmail" name="email" required>
             <div class="error-message">Please enter a valid email address</div>
@@ -526,6 +534,14 @@
           </div>
 
           <div id="signupError" class="error-alert">
+          </div>
+
+          <div class="form-group">
+            <label for="signupUserType">I want to register as:</label>
+            <select id="signupUserType" name="userType" class="w-full p-4 border-2 border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-amber-500 transition-colors">
+              <option value="customer">Customer</option>
+              <option value="seller">Seller</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -835,8 +851,16 @@
       try {
         console.log('Starting login process...');
         
+        const userType = document.getElementById('loginUserType').value;
         const response = await sessionManager.login(email, password);
         console.log('Login response:', response);
+
+        // Redirect based on user type
+        if (response.user.userType === 'seller') {
+          window.location.href = 'dashboard.html';
+        } else {
+          window.location.href = 'index.html';
+        }
         
         // Success
         showMessage('loginSuccess', 'Login successful! Redirecting...');
@@ -917,7 +941,8 @@
       try {
         console.log('Starting signup process...');
         
-        const response = await sessionManager.register(email, password, name);
+        const userType = document.getElementById('signupUserType').value;
+        const response = await sessionManager.register(email, password, name, userType);
         console.log('Signup response:', response);
         
         // Success

@@ -57,6 +57,7 @@
             <div>
               <h2 id="user-name" class="text-xl font-semibold text-gray-900">Loading...</h2>
               <p id="user-email" class="text-gray-600">Loading...</p>
+              <span class="inline-block mt-1 px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Seller Account</span>
             </div>
           </div>
           
@@ -78,12 +79,12 @@
             <div class="flex items-center">
               <div class="p-2 bg-blue-100 rounded-lg">
                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                 </svg>
               </div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Total Orders</p>
-                <p id="total-orders" class="text-2xl font-semibold text-gray-900">0</p>
+                <p class="text-sm font-medium text-gray-600">Total Products</p>
+                <p id="total-products" class="text-2xl font-semibold text-gray-900">0</p>
               </div>
             </div>
           </div>
@@ -96,8 +97,8 @@
                 </svg>
               </div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Completed</p>
-                <p id="completed-orders" class="text-2xl font-semibold text-gray-900">0</p>
+                <p class="text-sm font-medium text-gray-600">Active Products</p>
+                <p id="active-products" class="text-2xl font-semibold text-gray-900">0</p>
               </div>
             </div>
           </div>
@@ -106,31 +107,52 @@
             <div class="flex items-center">
               <div class="p-2 bg-amber-100 rounded-lg">
                 <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                 </svg>
               </div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Wishlist</p>
-                <p id="wishlist-count" class="text-2xl font-semibold text-gray-900">0</p>
+                <p class="text-sm font-medium text-gray-600">Product Views</p>
+                <p id="product-views" class="text-2xl font-semibold text-gray-900">0</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Recent Orders -->
+        <!-- Products List -->
         <div class="bg-white rounded-lg shadow-md">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Recent Orders</h3>
+          <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-900">Your Products</h3>
+            <button id="addProductBtn" class="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors">
+              Add New Product
+            </button>
           </div>
           <div class="p-6">
-            <div id="orders-list" class="space-y-4">
-              <div class="text-center text-gray-500 py-8">
-                <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                </svg>
-                <p>No orders yet</p>
-                <a href="index.html" class="text-amber-600 hover:text-amber-700 mt-2 inline-block">Start shopping</a>
-              </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">3D Model</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody" class="bg-white divide-y divide-gray-200">
+                  <!-- Products will be inserted here -->
+                  <tr class="text-center text-gray-500">
+                    <td colspan="6" class="py-8">
+                      <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                      </svg>
+                      <p>No products yet</p>
+                      <button id="addFirstProductBtn" class="text-amber-600 hover:text-amber-700 mt-2 inline-block">Add your first product</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -141,29 +163,29 @@
     <div class="mt-8 bg-white rounded-lg shadow-md p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <a href="index.html" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+        <button id="addNewProductBtn" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
           <svg class="w-6 h-6 text-amber-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m6 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
-          <span class="font-medium">Continue Shopping</span>
-        </a>
-        
-        <button id="view-orders" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-          </svg>
-          <span class="font-medium">View All Orders</span>
+          <span class="font-medium">Add New Product</span>
         </button>
         
-        <button id="view-wishlist" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+        <button id="manageInventory" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
           </svg>
-          <span class="font-medium">My Wishlist</span>
+          <span class="font-medium">Manage Inventory</span>
+        </button>
+        
+        <button id="viewAnalytics" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <span class="font-medium">View Analytics</span>
         </button>
         
         <button id="contact-support" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
           </svg>
           <span class="font-medium">Contact Support</span>
@@ -171,6 +193,89 @@
       </div>
     </div>
   </main>
+
+  <!-- Add/Edit Product Modal -->
+  <div id="productModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
+      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h3 id="modalTitle" class="text-lg font-semibold text-gray-900">Add New Product</h3>
+        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <form id="productForm" class="p-6">
+        <div class="space-y-6">
+          <div>
+            <label for="productName" class="block text-sm font-medium text-gray-700">Product Name</label>
+            <input type="text" id="productName" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500" required>
+          </div>
+
+          <div>
+            <label for="productDescription" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="productDescription" name="description" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500" required></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="productPrice" class="block text-sm font-medium text-gray-700">Price ($)</label>
+              <input type="number" id="productPrice" name="price" min="0" step="0.01" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500" required>
+            </div>
+
+            <div>
+              <label for="productCategory" class="block text-sm font-medium text-gray-700">Category</label>
+              <select id="productCategory" name="category" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500" required>
+                <option value="">Select a category</option>
+                <option value="living-room">Living Room</option>
+                <option value="bedroom">Bedroom</option>
+                <option value="dining-room">Dining Room</option>
+                <option value="office">Office</option>
+                <option value="outdoor">Outdoor</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="productImage" class="block text-sm font-medium text-gray-700">Product Images</label>
+            <input type="file" id="productImage" name="images" accept="image/*" multiple class="mt-1 block w-full" required>
+            <p class="mt-1 text-sm text-gray-500">Upload up to 5 images (Max 5MB each)</p>
+          </div>
+
+          <div>
+            <label for="productModel" class="block text-sm font-medium text-gray-700">3D Model (.obj)</label>
+            <input type="file" id="productModel" name="model" accept=".obj" class="mt-1 block w-full">
+            <p class="mt-1 text-sm text-gray-500">Upload a .obj file for AR view (Max 20MB)</p>
+          </div>
+
+          <div class="mt-6 flex justify-end space-x-3">
+            <button type="button" id="cancelProductBtn" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+              Cancel
+            </button>
+            <button type="submit" class="bg-amber-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+              Save Product
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">Delete Product</h3>
+      <p class="text-sm text-gray-500 mb-6">Are you sure you want to delete this product? This action cannot be undone.</p>
+      <div class="flex justify-end space-x-3">
+        <button id="cancelDeleteBtn" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+          Cancel
+        </button>
+        <button id="confirmDeleteBtn" class="bg-red-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-red-700">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer id="footer" class="bg-gray-900 text-white py-12 mt-16">
@@ -223,73 +328,187 @@
       // Load dashboard data
       const loadDashboardData = async () => {
         try {
-          // Simulate loading data (replace with actual API calls)
-          const mockData = {
-            totalOrders: 3,
-            completedOrders: 2,
-            wishlistCount: 5,
-            recentOrders: [
-              {
-                id: 1,
-                orderNumber: 'ORD-001',
-                date: '2024-01-15',
-                status: 'Delivered',
-                total: 1299,
-                items: ['Modern Sectional Sofa']
-              },
-              {
-                id: 2,
-                orderNumber: 'ORD-002',
-                date: '2024-01-10',
-                status: 'Shipped',
-                total: 399,
-                items: ['Minimalist Coffee Table']
-              }
-            ]
-          };
+          const response = await fetch('http://localhost:3000/api/products?seller=' + sessionManager.getUserId(), {
+            headers: sessionManager.getAuthHeaders()
+          });
+
+          if (!response.ok) throw new Error('Failed to load products');
+          
+          const products = await response.json();
           
           // Update stats
-          document.getElementById('total-orders').textContent = mockData.totalOrders;
-          document.getElementById('completed-orders').textContent = mockData.completedOrders;
-          document.getElementById('wishlist-count').textContent = mockData.wishlistCount;
+          const activeProducts = products.filter(p => p.status === 'active').length;
+          const totalViews = products.reduce((sum, p) => sum + (p.views || 0), 0);
           
-          // Update orders list
-          const ordersList = document.getElementById('orders-list');
-          if (mockData.recentOrders.length > 0) {
-            ordersList.innerHTML = mockData.recentOrders.map(order => `
-              <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                <div class="flex items-center space-x-4">
-                  <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                    </svg>
+          document.getElementById('total-products').textContent = products.length;
+          document.getElementById('active-products').textContent = activeProducts;
+          document.getElementById('product-views').textContent = totalViews;
+          
+          // Update products table
+          const tableBody = document.getElementById('productsTableBody');
+          if (products.length > 0) {
+            tableBody.innerHTML = products.map(product => `
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img class="h-10 w-10 rounded object-cover" src="${product.images[0]}" alt="${product.name}">
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                      <div class="text-sm text-gray-500">${product.description.substring(0, 50)}...</div>
+                    </div>
                   </div>
-                  <div>
-                    <p class="font-medium text-gray-900">${order.orderNumber}</p>
-                    <p class="text-sm text-gray-600">${order.items.join(', ')}</p>
-                    <p class="text-xs text-gray-500">${order.date}</p>
-                  </div>
-                </div>
-                <div class="text-right">
-                  <p class="font-medium text-gray-900">$${order.total}</p>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                    order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                    'bg-yellow-100 text-yellow-800'
-                  }">
-                    ${order.status}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">$${product.price.toFixed(2)}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">${product.category}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.model ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                    ${product.model ? 'Available' : 'Not Available'}
                   </span>
-                </div>
-              </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    product.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }">
+                    ${product.status}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button onclick="editProduct('${product.id}')" class="text-amber-600 hover:text-amber-900 mr-3">Edit</button>
+                  <button onclick="confirmDelete('${product.id}')" class="text-red-600 hover:text-red-900">Delete</button>
+                </td>
+              </tr>
             `).join('');
+          } else {
+            tableBody.innerHTML = `
+              <tr class="text-center text-gray-500">
+                <td colspan="6" class="py-8">
+                  <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                  </svg>
+                  <p>No products yet</p>
+                  <button onclick="showProductModal()" class="text-amber-600 hover:text-amber-700 mt-2 inline-block">Add your first product</button>
+                </td>
+              </tr>
+            `;
           }
           
         } catch (error) {
           console.error('Error loading dashboard data:', error);
+          // Show error message
+          alert('Failed to load products. Please try again.');
         }
       };
       
-      // Event listeners
+      // Product Modal Functions
+      const productModal = document.getElementById('productModal');
+      const productForm = document.getElementById('productForm');
+      let currentProductId = null;
+
+      function showProductModal(productId = null) {
+        currentProductId = productId;
+        const title = document.getElementById('modalTitle');
+        title.textContent = productId ? 'Edit Product' : 'Add New Product';
+        productModal.classList.remove('hidden');
+      }
+
+      function hideProductModal() {
+        productModal.classList.add('hidden');
+        productForm.reset();
+        currentProductId = null;
+      }
+
+      // Delete Modal Functions
+      const deleteModal = document.getElementById('deleteModal');
+      let productToDelete = null;
+
+      function showDeleteModal(productId) {
+        productToDelete = productId;
+        deleteModal.classList.remove('hidden');
+      }
+
+      function hideDeleteModal() {
+        deleteModal.classList.add('hidden');
+        productToDelete = null;
+      }
+
+      // Product Management Functions
+      async function editProduct(productId) {
+        try {
+          const response = await fetch(`http://localhost:3000/api/products/${productId}`, {
+            headers: sessionManager.getAuthHeaders()
+          });
+
+          if (!response.ok) throw new Error('Failed to load product');
+
+          const product = await response.json();
+          
+          // Fill form with product data
+          document.getElementById('productName').value = product.name;
+          document.getElementById('productDescription').value = product.description;
+          document.getElementById('productPrice').value = product.price;
+          document.getElementById('productCategory').value = product.category;
+          
+          showProductModal(productId);
+        } catch (error) {
+          console.error('Error loading product:', error);
+          alert('Failed to load product. Please try again.');
+        }
+      }
+
+      async function handleProductSubmit(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(productForm);
+        const url = currentProductId 
+          ? `http://localhost:3000/api/products/${currentProductId}`
+          : 'http://localhost:3000/api/products';
+        
+        try {
+          const response = await fetch(url, {
+            method: currentProductId ? 'PUT' : 'POST',
+            headers: {
+              ...sessionManager.getAuthHeaders(),
+              'Content-Type': 'multipart/form-data'
+            },
+            body: formData
+          });
+
+          if (!response.ok) throw new Error('Failed to save product');
+
+          hideProductModal();
+          loadDashboardData();
+        } catch (error) {
+          console.error('Error saving product:', error);
+          alert('Failed to save product. Please try again.');
+        }
+      }
+
+      async function handleDeleteProduct() {
+        if (!productToDelete) return;
+
+        try {
+          const response = await fetch(`http://localhost:3000/api/products/${productToDelete}`, {
+            method: 'DELETE',
+            headers: sessionManager.getAuthHeaders()
+          });
+
+          if (!response.ok) throw new Error('Failed to delete product');
+
+          hideDeleteModal();
+          loadDashboardData();
+        } catch (error) {
+          console.error('Error deleting product:', error);
+          alert('Failed to delete product. Please try again.');
+        }
+      }
+
+      // Event Listeners
       document.getElementById('edit-profile')?.addEventListener('click', () => {
         alert('Edit profile functionality coming soon!');
       });
@@ -297,13 +516,33 @@
       document.getElementById('change-password')?.addEventListener('click', () => {
         alert('Change password functionality coming soon!');
       });
-      
-      document.getElementById('view-orders')?.addEventListener('click', () => {
-        alert('View all orders functionality coming soon!');
+
+      document.getElementById('addProductBtn')?.addEventListener('click', () => {
+        showProductModal();
       });
+
+      document.getElementById('addNewProductBtn')?.addEventListener('click', () => {
+        showProductModal();
+      });
+
+      document.getElementById('addFirstProductBtn')?.addEventListener('click', () => {
+        showProductModal();
+      });
+
+      document.getElementById('closeModalBtn')?.addEventListener('click', hideProductModal);
+      document.getElementById('cancelProductBtn')?.addEventListener('click', hideProductModal);
       
-      document.getElementById('view-wishlist')?.addEventListener('click', () => {
-        alert('View wishlist functionality coming soon!');
+      document.getElementById('cancelDeleteBtn')?.addEventListener('click', hideDeleteModal);
+      document.getElementById('confirmDeleteBtn')?.addEventListener('click', handleDeleteProduct);
+
+      productForm?.addEventListener('submit', handleProductSubmit);
+
+      document.getElementById('manageInventory')?.addEventListener('click', () => {
+        alert('Inventory management coming soon!');
+      });
+
+      document.getElementById('viewAnalytics')?.addEventListener('click', () => {
+        alert('Analytics dashboard coming soon!');
       });
       
       document.getElementById('contact-support')?.addEventListener('click', () => {
@@ -314,7 +553,7 @@
       updateUserInfo();
       await loadDashboardData();
       
-      console.log('🚀 Dashboard initialized');
+      console.log('🚀 Seller Dashboard initialized');
     });
   </script>
 </body>
