@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard - HomeGo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amber: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+
+  <!-- Navigation -->
+  <nav id="navigation" class="bg-white shadow-lg sticky top-0 z-40">
+    <!-- Navigation content will be injected by JS -->
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Dashboard Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">My Dashboard</h1>
+      <p class="text-gray-600 mt-2">Welcome back! Manage your orders, wishlist, and account settings.</p>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <!-- Profile Card -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center space-x-4 mb-6">
+            <div id="user-avatar" class="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+              <!-- User avatar will be injected by JS -->
+            </div>
+            <div>
+              <h2 id="user-name" class="text-xl font-semibold text-gray-900">Loading...</h2>
+              <p id="user-email" class="text-gray-600">Loading...</p>
+              <span class="inline-block mt-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Customer</span>
+            </div>
+          </div>
+          
+          <div class="space-y-4">
+            <button id="edit-profile" class="w-full bg-amber-600 text-white py-2 px-4 rounded-lg hover:bg-amber-700 transition-colors">
+              Edit Profile
+            </button>
+            <button id="change-password" class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+              Change Password
+            </button>
+            <button onclick="window.location.href='index.html'" class="w-full border border-amber-300 text-amber-700 py-2 px-4 rounded-lg hover:bg-amber-50 transition-colors">
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="lg:col-span-3">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+              <div class="p-2 bg-blue-100 rounded-lg">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Orders</p>
+                <p id="total-orders" class="text-2xl font-semibold text-gray-900">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+              <div class="p-2 bg-green-100 rounded-lg">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Wishlist Items</p>
+                <p id="wishlist-count" class="text-2xl font-semibold text-gray-900">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+              <div class="p-2 bg-amber-100 rounded-lg">
+                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Spent</p>
+                <p id="total-spent" class="text-2xl font-semibold text-gray-900">$0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="bg-white rounded-lg shadow-md mb-8">
+          <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-900">Recent Orders</h3>
+            <button id="viewAllOrders" class="text-amber-600 hover:text-amber-700 text-sm font-medium">View All</button>
+          </div>
+          <div class="p-6">
+            <div id="ordersContainer" class="space-y-4">
+              <!-- Orders will be loaded here -->
+              <div class="text-center text-gray-500 py-8">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                <p>No orders yet</p>
+                <button onclick="window.location.href='index.html'" class="text-amber-600 hover:text-amber-700 mt-2 inline-block">Start Shopping</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wishlist -->
+        <div class="bg-white rounded-lg shadow-md">
+          <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-900">My Wishlist</h3>
+            <button id="viewAllWishlist" class="text-amber-600 hover:text-amber-700 text-sm font-medium">View All</button>
+          </div>
+          <div class="p-6">
+            <div id="wishlistContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Wishlist items will be loaded here -->
+              <div class="col-span-full text-center text-gray-500 py-8">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+                <p>Your wishlist is empty</p>
+                <button onclick="window.location.href='index.html'" class="text-amber-600 hover:text-amber-700 mt-2 inline-block">Browse Products</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <button onclick="window.location.href='index.html'" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-amber-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          </svg>
+          <span class="font-medium">Browse Products</span>
+        </button>
+        
+        <button id="trackOrder" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          <span class="font-medium">Track Order</span>
+        </button>
+        
+        <button id="returnRequest" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+          </svg>
+          <span class="font-medium">Return Request</span>
+        </button>
+        
+        <button id="contact-support" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+          </svg>
+          <span class="font-medium">Contact Support</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="bg-gray-900 text-white py-12 mt-16">
+    <!-- Footer content will be injected by JS -->
+  </footer>
+
+  <!-- Configuration -->
+  <script src="config.js"></script>
+  
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Initialize Supabase using config
+    window.supabase = supabase.createClient(config.supabase.url, config.supabase.anonKey);
+  </script>
+  
+  <!-- Session Management -->
+  <script src="session.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <!-- Customer Dashboard Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Initialize Session Manager
+      const sessionManager = new SessionManager();
+      
+      // Check if user is authenticated and is a customer
+      const isAuthenticated = await sessionManager.requireAuth();
+      if (!isAuthenticated) {
+        return; // Will redirect to login
+      }
+      
+      if (!sessionManager.isCustomer()) {
+        // Redirect to appropriate dashboard
+        window.location.href = sessionManager.getDashboardUrl();
+        return;
+      }
+      
+      // Render navigation
+      const renderNavigation = () => {
+        const navigationEl = document.getElementById('navigation');
+        const userName = sessionManager.getUserName();
+        
+        navigationEl.innerHTML = `
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+              <a href="index.html" class="text-2xl font-bold text-amber-600">HomeGo</a>
+              <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-gray-700 hover:text-amber-600 transition-colors">Home</a>
+                <a href="index.html#products" class="text-gray-700 hover:text-amber-600 transition-colors">Products</a>
+                <a href="customer-dashboard.html" class="text-amber-600 font-medium">Dashboard</a>
+              </div>
+              <div class="flex items-center space-x-4">
+                <div class="relative">
+                  <button id="user-menu-button" class="flex items-center space-x-2 p-2 text-gray-700 hover:text-amber-600 transition-colors">
+                    <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                      ${userName.charAt(0).toUpperCase()}
+                    </div>
+                    <span class="hidden md:block text-sm text-gray-700">${userName}</span>
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </button>
+                  <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                    <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                      <div class="font-medium">${userName}</div>
+                      <div class="text-gray-500">${sessionManager.getUserEmail()}</div>
+                    </div>
+                    <a href="customer-dashboard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                    <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add event listeners for user menu
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userMenu = document.getElementById('user-menu');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        userMenuButton?.addEventListener('click', () => {
+          userMenu.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!userMenuButton?.contains(e.target) && !userMenu?.contains(e.target)) {
+            userMenu?.classList.add('hidden');
+          }
+        });
+        
+        logoutBtn?.addEventListener('click', async () => {
+          await sessionManager.logout();
+        });
+      };
+      
+      // Update user info
+      const updateUserInfo = () => {
+        const userName = sessionManager.getUserName();
+        const userEmail = sessionManager.getUserEmail();
+        const userAvatar = document.getElementById('user-avatar');
+        const userNameEl = document.getElementById('user-name');
+        const userEmailEl = document.getElementById('user-email');
+        
+        if (userAvatar) {
+          userAvatar.textContent = userName.charAt(0).toUpperCase();
+        }
+        if (userNameEl) {
+          userNameEl.textContent = userName;
+        }
+        if (userEmailEl) {
+          userEmailEl.textContent = userEmail;
+        }
+      };
+      
+      // Load customer dashboard data
+      const loadDashboardData = async () => {
+        try {
+          // Load orders
+          const ordersResponse = await fetch(`http://localhost:3000/api/orders/user/${sessionManager.getUser().id}`, {
+            headers: sessionManager.getAuthHeaders()
+          });
+          
+          if (ordersResponse.ok) {
+            const orders = await ordersResponse.json();
+            
+            // Update stats
+            const totalSpent = orders.reduce((sum, order) => sum + order.total, 0);
+            document.getElementById('total-orders').textContent = orders.length;
+            document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
+            
+            // Display recent orders
+            const ordersContainer = document.getElementById('ordersContainer');
+            if (orders.length > 0) {
+              const recentOrders = orders.slice(0, 3); // Show last 3 orders
+              ordersContainer.innerHTML = recentOrders.map(order => `
+                <div class="border border-gray-200 rounded-lg p-4">
+                  <div class="flex justify-between items-start mb-2">
+                    <div>
+                      <p class="font-medium text-gray-900">Order #${order.orderNumber}</p>
+                      <p class="text-sm text-gray-500">${new Date(order.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <span class="px-2 py-1 text-xs rounded-full ${
+                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                      order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                      order.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }">${order.status}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <p class="text-lg font-semibold text-gray-900">$${order.total.toFixed(2)}</p>
+                    <button class="text-amber-600 hover:text-amber-700 text-sm font-medium">View Details</button>
+                  </div>
+                </div>
+              `).join('');
+            }
+          }
+          
+          // Load wishlist
+          const wishlistResponse = await fetch(`http://localhost:3000/api/wishlist/user/${sessionManager.getUser().id}`, {
+            headers: sessionManager.getAuthHeaders()
+          });
+          
+          if (wishlistResponse.ok) {
+            const wishlistItems = await wishlistResponse.json();
+            document.getElementById('wishlist-count').textContent = wishlistItems.length;
+            
+            // Display wishlist items
+            const wishlistContainer = document.getElementById('wishlistContainer');
+            if (wishlistItems.length > 0) {
+              const recentWishlist = wishlistItems.slice(0, 3); // Show 3 items
+              wishlistContainer.innerHTML = recentWishlist.map(item => `
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                  <img src="${item.product.image}" alt="${item.product.name}" class="w-full h-32 object-cover">
+                  <div class="p-3">
+                    <h4 class="font-medium text-gray-900 text-sm">${item.product.name}</h4>
+                    <p class="text-lg font-semibold text-amber-600">$${item.product.price}</p>
+                    <button class="w-full mt-2 bg-amber-600 text-white py-1 px-2 rounded text-sm hover:bg-amber-700 transition-colors">
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              `).join('');
+            }
+          }
+          
+        } catch (error) {
+          console.error('Error loading dashboard data:', error);
+        }
+      };
+      
+      // Event listeners
+      document.getElementById('edit-profile')?.addEventListener('click', () => {
+        alert('Edit profile functionality coming soon!');
+      });
+      
+      document.getElementById('change-password')?.addEventListener('click', () => {
+        alert('Change password functionality coming soon!');
+      });
+      
+      document.getElementById('trackOrder')?.addEventListener('click', () => {
+        alert('Order tracking functionality coming soon!');
+      });
+      
+      document.getElementById('returnRequest')?.addEventListener('click', () => {
+        alert('Return request functionality coming soon!');
+      });
+      
+      document.getElementById('contact-support')?.addEventListener('click', () => {
+        window.location.href = 'index.html#contact';
+      });
+      
+      document.getElementById('viewAllOrders')?.addEventListener('click', () => {
+        alert('View all orders functionality coming soon!');
+      });
+      
+      document.getElementById('viewAllWishlist')?.addEventListener('click', () => {
+        alert('View all wishlist functionality coming soon!');
+      });
+      
+      // Initialize dashboard
+      renderNavigation();
+      updateUserInfo();
+      await loadDashboardData();
+      
+      console.log('🛍️ Customer Dashboard initialized');
+    });
+  </script>
+</body>
+</html>

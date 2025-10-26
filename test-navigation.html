@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigation Test - HomeGo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  
+  <div class="max-w-4xl mx-auto p-8">
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">🧭 Navigation Diagnostic</h1>
+      <p class="text-gray-600 mb-4">This page tests if navigation loads correctly.</p>
+      
+      <div id="results" class="space-y-4">
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <p class="text-sm text-yellow-800">
+            <strong>Testing...</strong> Please wait
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Navigation Container -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <nav id="navigation" class="bg-white shadow-lg">
+        <!-- Navigation will be injected here -->
+      </nav>
+      <div class="p-6">
+        <p class="text-gray-600 text-sm">Navigation should appear above this text</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load all dependencies in correct order -->
+  <script src="config.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.supabase = supabase.createClient(config.supabase.url, config.supabase.anonKey);
+  </script>
+  
+  <script src="session.js"></script>
+  <script src="currency.js"></script>
+  <script src="currency-selector.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <script>
+    // Test script loading
+    const results = document.getElementById('results');
+    
+    function addResult(status, message) {
+      const color = status === 'success' ? 'green' : status === 'error' ? 'red' : 'blue';
+      const icon = status === 'success' ? '✅' : status === 'error' ? '❌' : 'ℹ️';
+      
+      results.innerHTML += `
+        <div class="bg-${color}-50 border border-${color}-200 rounded-lg p-4">
+          <p class="text-sm text-${color}-800">
+            <strong>${icon} ${message}</strong>
+          </p>
+        </div>
+      `;
+    }
+
+    // Clear initial message
+    results.innerHTML = '';
+
+    // Test 1: Check if config loaded
+    if (typeof config !== 'undefined') {
+      addResult('success', 'Config.js loaded');
+    } else {
+      addResult('error', 'Config.js failed to load');
+    }
+
+    // Test 2: Check if Supabase loaded
+    if (typeof supabase !== 'undefined' && window.supabase) {
+      addResult('success', 'Supabase loaded');
+    } else {
+      addResult('error', 'Supabase failed to load');
+    }
+
+    // Test 3: Check if SessionManager loaded
+    if (typeof SessionManager !== 'undefined') {
+      addResult('success', 'SessionManager loaded');
+    } else {
+      addResult('error', 'SessionManager failed to load');
+    }
+
+    // Test 4: Check if CurrencyManager loaded
+    if (typeof CurrencyManager !== 'undefined') {
+      addResult('success', 'CurrencyManager loaded');
+    } else {
+      addResult('error', 'CurrencyManager failed to load');
+    }
+
+    // Test 5: Check if lucide loaded
+    if (typeof lucide !== 'undefined') {
+      addResult('success', 'Lucide icons loaded');
+    } else {
+      addResult('error', 'Lucide icons failed to load');
+    }
+
+    // Wait for everything to load
+    window.addEventListener('load', function() {
+      addResult('info', 'Page fully loaded - starting navigation test');
+      
+      // Test navigation rendering
+      try {
+        const sessionManager = new SessionManager();
+        const currencyManager = new CurrencyManager();
+        const navigationEl = document.getElementById('navigation');
+        
+        if (!navigationEl) {
+          addResult('error', 'Navigation element not found');
+          return;
+        }
+
+        // Render simple navigation
+        navigationEl.innerHTML = `
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+              <div class="text-2xl font-bold text-amber-600">HomeGo</div>
+              <div class="flex items-center space-x-8">
+                <a href="#" class="text-gray-700 hover:text-amber-600">Home</a>
+                <a href="#" class="text-gray-700 hover:text-amber-600">Products</a>
+                <a href="#" class="text-gray-700 hover:text-amber-600">About</a>
+                <a href="#" class="text-gray-700 hover:text-amber-600">Contact</a>
+                <a href="login.html" class="text-gray-700 hover:text-amber-600">Login</a>
+              </div>
+              <div class="flex items-center space-x-4">
+                <button class="p-2 text-gray-700 hover:text-amber-600 relative">
+                  <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        lucide.createIcons();
+        addResult('success', 'Navigation rendered successfully!');
+        
+      } catch (error) {
+        addResult('error', 'Navigation render failed: ' + error.message);
+        console.error('Full error:', error);
+      }
+    });
+  </script>
+</body>
+</html>

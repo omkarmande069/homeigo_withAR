@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Currency Demo - HomeGo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Multi-Currency System</h1>
+      <p class="text-gray-600">Demonstrating currency conversion for INR, EUR, GBP, and USD</p>
+    </div>
+
+    <!-- Currency Selector -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Select Currency</h2>
+      <div class="flex items-center space-x-4">
+        <span class="text-gray-600">Current Currency:</span>
+        <div id="currency-selector"></div>
+      </div>
+    </div>
+
+    <!-- Sample Products -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Sample Products</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="products-grid">
+        <!-- Products will be rendered here -->
+      </div>
+    </div>
+
+    <!-- Conversion Table -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Currency Conversion Table</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Base (USD)</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">₹ INR</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">€ EUR</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">£ GBP</th>
+            </tr>
+          </thead>
+          <tbody id="conversion-table" class="bg-white divide-y divide-gray-200">
+            <!-- Conversion rows will be rendered here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Exchange Rates -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Current Exchange Rates</h2>
+      <div id="exchange-rates" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- Exchange rates will be rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="currency.js"></script>
+  <script src="currency-selector.js"></script>
+
+  <script>
+    // Initialize currency manager
+    const currencyManager = new CurrencyManager();
+    const currencySelector = new CurrencySelectorComponent(currencyManager);
+
+    // Sample products
+    const products = [
+      { id: 1, name: 'Modern Sofa', price: 899, image: 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=300' },
+      { id: 2, name: 'Coffee Table', price: 299, image: 'https://images.pexels.com/photos/2082090/pexels-photo-2082090.jpeg?auto=compress&cs=tinysrgb&w=300' },
+      { id: 3, name: 'Floor Lamp', price: 189, image: 'https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=300' }
+    ];
+
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      grid.innerHTML = products.map(product => `
+        <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+          <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="font-semibold text-gray-900 mb-2">${product.name}</h3>
+            <p class="text-2xl font-bold text-amber-600">${currencyManager.format(product.price)}</p>
+            <button class="w-full mt-3 bg-amber-600 text-white py-2 rounded hover:bg-amber-700 transition-colors">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderConversionTable() {
+      const table = document.getElementById('conversion-table');
+      const testPrices = [100, 500, 1000, 2500, 5000];
+      
+      table.innerHTML = testPrices.map(price => `
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$${price.toLocaleString()}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${currencyManager.format(price, { currency: 'INR' })}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${currencyManager.format(price, { currency: 'EUR' })}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${currencyManager.format(price, { currency: 'GBP' })}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderExchangeRates() {
+      const ratesDiv = document.getElementById('exchange-rates');
+      const currencies = currencyManager.getAvailableCurrencies();
+      
+      ratesDiv.innerHTML = currencies.map(curr => `
+        <div class="bg-gray-50 rounded-lg p-4 text-center">
+          <div class="text-3xl mb-2">${curr.symbol}</div>
+          <div class="text-sm text-gray-600">${curr.name}</div>
+          <div class="text-lg font-semibold text-gray-900 mt-2">
+            ${curr.code === 'USD' ? '1.00' : curr.rate.toFixed(2)}
+          </div>
+          <div class="text-xs text-gray-500">per USD</div>
+        </div>
+      `).join('');
+    }
+
+    // Initial render
+    currencySelector.render('currency-selector');
+    renderProducts();
+    renderConversionTable();
+    renderExchangeRates();
+
+    // Listen for currency changes
+    document.addEventListener('currencyChanged', (event) => {
+      console.log('Currency changed:', event.detail);
+      renderProducts();
+      renderConversionTable();
+      
+      // Show notification
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+      notification.innerHTML = `
+        <div class="flex items-center space-x-2">
+          <span class="text-2xl">${event.detail.symbol}</span>
+          <span>Currency changed to ${event.detail.currency}</span>
+        </div>
+      `;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

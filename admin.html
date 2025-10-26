@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - HomeGo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .active-tab { @apply bg-amber-600 text-white; }
+    .inactive-tab { @apply text-gray-700 hover:bg-gray-100; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <div class="flex h-screen overflow-hidden">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-white flex-shrink-0">
+      <div class="p-6">
+        <h1 class="text-2xl font-bold text-amber-500">HomeGo Admin</h1>
+      </div>
+      
+      <nav class="mt-6">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="active-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          <span>Dashboard</span>
+        </button>
+        
+        <button onclick="switchTab('sellers')" id="nav-sellers" class="inactive-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+          <span>Sellers</span>
+        </button>
+
+        <button onclick="switchTab('products')" id="nav-products" class="inactive-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+          <span>Products</span>
+        </button>
+
+        <button onclick="switchTab('orders')" id="nav-orders" class="inactive-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          </svg>
+          <span>Orders</span>
+        </button>
+
+        <button onclick="switchTab('transactions')" id="nav-transactions" class="inactive-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Transactions</span>
+        </button>
+
+        <button onclick="switchTab('promotions')" id="nav-promotions" class="inactive-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+          </svg>
+          <span>Promotions</span>
+        </button>
+
+        <button onclick="switchTab('content')" id="nav-content" class="inactive-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span>Content</span>
+        </button>
+
+        <button onclick="switchTab('support')" id="nav-support" class="inactive-tab w-full text-left px-6 py-3 flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <span>Support</span>
+          <span id="support-badge" class="ml-auto bg-red-500 text-xs px-2 py-1 rounded-full">0</span>
+        </button>
+      </nav>
+
+      <div class="absolute bottom-0 w-64 p-6">
+        <button onclick="logout()" class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+      
+      <!-- Header -->
+      <header class="bg-white shadow-sm">
+        <div class="flex justify-between items-center px-8 py-4">
+          <h2 class="text-2xl font-bold text-gray-900" id="page-title">Dashboard Overview</h2>
+          <div class="flex items-center space-x-4">
+            <span class="text-sm text-gray-600">Admin User</span>
+            <div class="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold">A</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-8">
+
+        <!-- Dashboard Tab -->
+        <div id="content-dashboard" class="tab-content">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-gray-600">Total Revenue</h3>
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-3xl font-bold text-gray-900" id="total-revenue">$0</p>
+              <p class="text-sm text-green-600 mt-2">↑ 15.3% from last month</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-gray-600">Total Orders</h3>
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-3xl font-bold text-gray-900" id="dashboard-total-orders">0</p>
+              <p class="text-sm text-blue-600 mt-2">128 pending</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-gray-600">Active Sellers</h3>
+                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-3xl font-bold text-gray-900" id="active-sellers">0</p>
+              <p class="text-sm text-purple-600 mt-2">12 new this month</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-gray-600">Products</h3>
+                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-3xl font-bold text-gray-900" id="dashboard-total-products">0</p>
+              <p class="text-sm text-amber-600 mt-2">45 pending approval</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-lg font-semibold mb-4">Revenue Overview</h3>
+              <canvas id="revenueChart"></canvas>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-lg font-semibold mb-4">Sales by Category</h3>
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+            <div id="recent-activity" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <!-- Sellers Tab -->
+        <div id="content-sellers" class="tab-content hidden">
+          <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-lg font-semibold">Seller Management</h3>
+              <button onclick="openAddSellerModal()" class="bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700">
+                + Add Seller
+              </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Seller Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Products</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sales</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="sellers-table" class="divide-y divide-gray-200"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="content-products" class="tab-content hidden">
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-lg font-semibold">Product Management</h3>
+              <div class="flex space-x-2">
+                <select id="product-filter" class="px-4 py-2 border rounded-lg">
+                  <option value="all">All Products</option>
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending Approval</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+            
+            <div id="products-table" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+          </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="content-orders" class="tab-content hidden">
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold mb-6">Order Management</h3>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-table" class="divide-y divide-gray-200"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div id="content-transactions" class="tab-content hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Total Transactions</h3>
+              <p class="text-3xl font-bold text-gray-900" id="total-transactions">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Successful</h3>
+              <p class="text-3xl font-bold text-green-600" id="successful-transactions">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Failed</h3>
+              <p class="text-3xl font-bold text-red-600" id="failed-transactions">0</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold mb-6">Transaction History</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Transaction ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="transactions-table" class="divide-y divide-gray-200"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promotions Tab -->
+        <div id="content-promotions" class="tab-content hidden">
+          <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-lg font-semibold">Promotions & Discounts</h3>
+              <button onclick="openAddPromoModal()" class="bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700">
+                + Create Promotion
+              </button>
+            </div>
+            
+            <div id="promotions-list" class="space-y-4"></div>
+          </div>
+        </div>
+
+        <!-- Content Tab -->
+        <div id="content-content" class="tab-content hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-lg font-semibold mb-4">Homepage Banner</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                  <input type="text" id="banner-title" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Subtitle</label>
+                  <input type="text" id="banner-subtitle" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                  <input type="url" id="banner-image" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <button onclick="saveBannerContent()" class="w-full bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700">
+                  Save Changes
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-lg font-semibold mb-4">Featured Categories</h3>
+              <div id="featured-categories" class="space-y-3"></div>
+              <button onclick="addFeaturedCategory()" class="w-full mt-4 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300">
+                + Add Category
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support Tab -->
+        <div id="content-support" class="tab-content hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Open Tickets</h3>
+              <p class="text-3xl font-bold text-yellow-600" id="support-open">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">In Progress</h3>
+              <p class="text-3xl font-bold text-blue-600" id="support-progress">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Resolved</h3>
+              <p class="text-3xl font-bold text-green-600" id="support-resolved">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Total Tickets</h3>
+              <p class="text-3xl font-bold text-gray-900" id="support-total">0</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-lg font-semibold">Support Tickets</h3>
+              <div class="flex space-x-2">
+                <button onclick="filterTickets('all')" class="px-4 py-2 text-sm rounded-lg bg-amber-600 text-white">All</button>
+                <button onclick="filterTickets('customer')" class="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-700">Customer</button>
+                <button onclick="filterTickets('seller')" class="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-700">Seller</button>
+              </div>
+            </div>
+            
+            <div id="support-tickets-list" class="space-y-4"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Seller Modal -->
+  <div id="add-seller-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full">
+      <h2 class="text-2xl font-bold mb-6">Add New Seller</h2>
+      <form id="add-seller-form" class="space-y-4">
+        <input type="text" placeholder="Store Name" required class="w-full px-4 py-2 border rounded-lg">
+        <input type="email" placeholder="Email" required class="w-full px-4 py-2 border rounded-lg">
+        <input type="tel" placeholder="Phone" required class="w-full px-4 py-2 border rounded-lg">
+        <textarea placeholder="Description" rows="3" class="w-full px-4 py-2 border rounded-lg"></textarea>
+        <div class="flex space-x-3">
+          <button type="submit" class="flex-1 bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700">Add</button>
+          <button type="button" onclick="closeModal('add-seller-modal')" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Promotion Modal -->
+  <div id="add-promo-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full">
+      <h2 class="text-2xl font-bold mb-6">Create Promotion</h2>
+      <form id="add-promo-form" class="space-y-4">
+        <input type="text" placeholder="Promotion Name" required class="w-full px-4 py-2 border rounded-lg">
+        <input type="text" placeholder="Promo Code" required class="w-full px-4 py-2 border rounded-lg">
+        <input type="number" placeholder="Discount %" required class="w-full px-4 py-2 border rounded-lg">
+        <input type="date" placeholder="Start Date" required class="w-full px-4 py-2 border rounded-lg">
+        <input type="date" placeholder="End Date" required class="w-full px-4 py-2 border rounded-lg">
+        <div class="flex space-x-3">
+          <button type="submit" class="flex-1 bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700">Create</button>
+          <button type="button" onclick="closeModal('add-promo-modal')" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Ticket Details Modal -->
+  <div id="ticket-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-start mb-6">
+        <div>
+          <h2 class="text-2xl font-bold" id="modal-ticket-subject">Ticket Subject</h2>
+          <p class="text-sm text-gray-600" id="modal-ticket-id">TKT-123456</p>
+        </div>
+        <button onclick="closeModal('ticket-modal')" class="text-gray-500 hover:text-gray-700">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-sm text-gray-600">From</p>
+            <p class="font-medium" id="modal-ticket-user">User Name</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Type</p>
+            <p class="font-medium" id="modal-ticket-type">Customer</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Priority</p>
+            <p class="font-medium" id="modal-ticket-priority">Medium</p>
+          </div>
+        </div>
+
+        <div class="border-t pt-4">
+          <p class="text-sm text-gray-600 mb-2">Message</p>
+          <p class="text-gray-900" id="modal-ticket-message"></p>
+        </div>
+
+        <div class="border-t pt-4">
+          <p class="text-sm text-gray-600 mb-3">Status</p>
+          <select id="modal-ticket-status" class="w-full px-4 py-2 border rounded-lg">
+            <option value="open">Open</option>
+            <option value="in-progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+
+        <div class="border-t pt-4">
+          <p class="text-sm text-gray-600 mb-3">Admin Response</p>
+          <textarea id="admin-response" rows="4" class="w-full px-4 py-2 border rounded-lg" placeholder="Type your response..."></textarea>
+        </div>
+      </div>
+
+      <div class="flex space-x-3">
+        <button onclick="updateTicket()" class="flex-1 bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700">
+          Update Ticket
+        </button>
+        <button onclick="closeModal('ticket-modal')" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="currency.js"></script>
+  <script src="api.js"></script>
+  <script src="chatbot.js"></script>
+
+  <script>
+    const currencyManager = new CurrencyManager();
+    let sellers = [];
+    let products = [];
+    let orders = [];
+    let promotions = [];
+    let currentTicketId = null;
+
+    // Tab Switching
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('[id^="nav-"]').forEach(el => {
+        el.classList.remove('active-tab');
+        el.classList.add('inactive-tab');
+      });
+      document.getElementById(`content-${tab}`).classList.remove('hidden');
+      document.getElementById(`nav-${tab}`).classList.remove('inactive-tab');
+      document.getElementById(`nav-${tab}`).classList.add('active-tab');
+
+      const titles = {
+        dashboard: 'Dashboard Overview',
+        sellers: 'Seller Management',
+        products: 'Product Management',
+        orders: 'Order Management',
+        transactions: 'Transactions',
+        promotions: 'Promotions & Discounts',
+        content: 'Content Management',
+        support: 'Support Center'
+      };
+      document.getElementById('page-title').textContent = titles[tab];
+
+      if (tab === 'dashboard') loadDashboard();
+      if (tab === 'sellers') loadSellers();
+      if (tab === 'products') loadProducts();
+      if (tab === 'orders') loadOrders();
+      if (tab === 'transactions') loadTransactions();
+      if (tab === 'promotions') loadPromotions();
+      if (tab === 'support') loadSupport();
+    }
+
+    // Dashboard
+    async function loadDashboard() {
+      try {
+        const stats = await API.getAdminStats();
+        
+        document.getElementById('total-revenue').textContent = currencyManager.format(stats.totalRevenue || 0);
+        document.getElementById('dashboard-total-orders').textContent = stats.totalOrders || 0;
+        document.getElementById('active-sellers').textContent = stats.totalSellers || 0;
+        document.getElementById('dashboard-total-products').textContent = stats.totalProducts || 0;
+
+      // Revenue Chart
+      const ctx1 = document.getElementById('revenueChart');
+      if (ctx1) {
+        new Chart(ctx1, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+              label: 'Revenue',
+              data: [12000, 19000, 15000, 25000, 22000, 30000],
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              tension: 0.4
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: true }
+        });
+      }
+
+      // Category Chart
+      const ctx2 = document.getElementById('categoryChart');
+      if (ctx2) {
+        new Chart(ctx2, {
+          type: 'doughnut',
+          data: {
+            labels: ['Furniture', 'Decor', 'Lighting', 'Kitchen', 'Outdoor'],
+            datasets: [{
+              data: [30, 25, 20, 15, 10],
+              backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ef4444']
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: true }
+        });
+      }
+
+      // Recent Activity
+      document.getElementById('recent-activity').innerHTML = `
+        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+          <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium">New order placed</p>
+            <p class="text-xs text-gray-600">2 minutes ago</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+          <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium">New seller registered</p>
+            <p class="text-xs text-gray-600">1 hour ago</p>
+            </div>
+          </div>
+        </div>
+      `;
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+      }
+    }
+
+    // Sellers
+    async function loadSellers() {
+      try {
+        sellers = await API.getSellers();
+
+        document.getElementById('sellers-table').innerHTML = sellers.map(seller => `
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap">${seller.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${seller.email}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${seller.products || 0}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${currencyManager.format(seller.sales || 0)}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="px-3 py-1 text-xs font-semibold rounded-full ${
+              seller.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }">${seller.status}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <button onclick="toggleSellerStatus('${seller.id}')" class="text-amber-600 hover:text-amber-800 text-sm font-medium">
+              ${seller.status === 'active' ? 'Suspend' : 'Activate'}
+            </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading sellers:', error);
+      }
+    }
+
+    async function toggleSellerStatus(id) {
+      const seller = sellers.find(s => s._id === id);
+      if (seller) {
+        const newStatus = seller.status === 'active' ? 'suspended' : 'active';
+        try {
+          await API.updateSellerStatus(id, newStatus);
+          loadSellers();
+        } catch (error) {
+          console.error('Error updating seller status:', error);
+          alert('Failed to update seller status');
+        }
+      }
+    }
+
+    // Products
+    async function loadProducts() {
+      try {
+        products = await API.getProducts();
+        const container = document.getElementById('products-table');
+        container.innerHTML = products.length === 0
+        ? '<div class="col-span-full text-center py-12"><p class="text-gray-500">No products available</p></div>'
+        : products.map(product => `
+          <div class="bg-white border rounded-xl overflow-hidden">
+            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">${product.name}</h3>
+              <p class="text-sm text-gray-600 mb-2 line-clamp-2">${product.description}</p>
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-lg font-bold text-amber-600">${currencyManager.format(product.price)}</span>
+                <span class="text-sm text-gray-600">Stock: ${product.stock}</span>
+              </div>
+              <button onclick="deleteProduct('${product.id}')" class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 text-sm">
+                Remove
+              </button>
+              </div>
+            </div>
+          `).join('');
+      } catch (error) {
+        console.error('Error loading products:', error);
+      }
+    }
+
+    async function deleteProduct(id) {
+      if (confirm('Delete this product?')) {
+        try {
+          await API.deleteProduct(id);
+          loadProducts();
+        } catch (error) {
+          console.error('Error deleting product:', error);
+          alert('Failed to delete product');
+        }
+      }
+    }
+
+    // Orders
+    function loadOrders() {
+      if (orders.length === 0) {
+        orders = [
+          { id: 'ORD-1001', customer: 'Alice Smith', date: new Date().toISOString(), total: 299.99, status: 'pending' },
+          { id: 'ORD-1002', customer: 'Bob Johnson', date: new Date().toISOString(), total: 599.99, status: 'completed' }
+        ];
+        localStorage.setItem('sellerOrders', JSON.stringify(orders));
+      }
+
+      document.getElementById('orders-table').innerHTML = orders.map(order => `
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap font-medium">${order.id}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${order.customer}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${new Date(order.date).toLocaleDateString()}</td>
+          <td class="px-6 py-4 whitespace-nowrap font-semibold">${currencyManager.format(order.total)}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="px-3 py-1 text-xs font-semibold rounded-full ${
+              order.status === 'completed' ? 'bg-green-100 text-green-800' : 
+              order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+            }">${order.status}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <button class="text-amber-600 hover:text-amber-800 text-sm font-medium">View</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Transactions
+    function loadTransactions() {
+      const transactions = orders.map((order, idx) => ({
+        id: 'TXN-' + (1000 + idx),
+        orderId: order.id,
+        amount: order.total,
+        method: 'Credit Card',
+        date: order.date,
+        status: Math.random() > 0.1 ? 'success' : 'failed'
+      }));
+
+      document.getElementById('total-transactions').textContent = transactions.length;
+      document.getElementById('successful-transactions').textContent = transactions.filter(t => t.status === 'success').length;
+      document.getElementById('failed-transactions').textContent = transactions.filter(t => t.status === 'failed').length;
+
+      document.getElementById('transactions-table').innerHTML = transactions.map(txn => `
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap font-medium">${txn.id}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${txn.orderId}</td>
+          <td class="px-6 py-4 whitespace-nowrap font-semibold">${currencyManager.format(txn.amount)}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${txn.method}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${new Date(txn.date).toLocaleDateString()}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="px-3 py-1 text-xs font-semibold rounded-full ${
+              txn.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }">${txn.status}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Promotions
+    function loadPromotions() {
+      document.getElementById('promotions-list').innerHTML = promotions.length === 0
+        ? '<p class="text-gray-500 text-sm">No active promotions</p>'
+        : promotions.map(promo => `
+          <div class="border rounded-lg p-4 flex justify-between items-center">
+            <div>
+              <h4 class="font-semibold">${promo.name}</h4>
+              <p class="text-sm text-gray-600">Code: ${promo.code} | ${promo.discount}% off</p>
+              <p class="text-xs text-gray-500 mt-1">${new Date(promo.start).toLocaleDateString()} - ${new Date(promo.end).toLocaleDateString()}</p>
+            </div>
+            <button onclick="deletePromotion('${promo.id}')" class="text-red-600 hover:text-red-800">Delete</button>
+          </div>
+        `).join('');
+    }
+
+    function deletePromotion(id) {
+      promotions = promotions.filter(p => p.id !== id);
+      localStorage.setItem('promotions', JSON.stringify(promotions));
+      loadPromotions();
+    }
+
+    // Support
+    async function loadSupport() {
+      try {
+        const tickets = await API.getSupportTickets();
+        const stats = await API.getAdminStats();
+      
+        document.getElementById('support-open').textContent = stats.tickets?.open || 0;
+        document.getElementById('support-progress').textContent = stats.tickets?.inProgress || 0;
+        document.getElementById('support-resolved').textContent = stats.tickets?.resolved || 0;
+        document.getElementById('support-total').textContent = stats.tickets?.total || 0;
+        document.getElementById('support-badge').textContent = stats.tickets?.open || 0;
+
+        renderTickets(tickets);
+      } catch (error) {
+        console.error('Error loading support:', error);
+      }
+    }
+
+    function renderTickets(tickets) {
+      document.getElementById('support-tickets-list').innerHTML = tickets.length === 0
+        ? '<p class="text-gray-500 text-sm">No tickets available</p>'
+        : tickets.map(ticket => `
+          <div class="border rounded-lg p-4 hover:shadow-md transition cursor-pointer" onclick="openTicketModal('${ticket.id}')">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <p class="font-semibold">${ticket.subject}</p>
+                <p class="text-xs text-gray-600">${ticket.ticketId} • ${ticket.userName} (${ticket.userType})</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="px-3 py-1 text-xs font-semibold rounded-full ${
+                  ticket.status === 'open' ? 'bg-yellow-100 text-yellow-800' :
+                  ticket.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
+                  ticket.status === 'resolved' ? 'bg-green-100 text-green-800' :
+                  'bg-gray-100 text-gray-800'
+                }">${ticket.status}</span>
+                <span class="px-2 py-1 text-xs rounded ${
+                  ticket.priority === 'urgent' ? 'bg-red-100 text-red-800' :
+                  ticket.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                  'bg-gray-100 text-gray-700'
+                }">${ticket.priority}</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-700 mb-2 line-clamp-2">${ticket.message}</p>
+            <p class="text-xs text-gray-500">${new Date(ticket.createdAt).toLocaleString()}</p>
+          </div>
+        `).join('');
+    }
+
+    async function filterTickets(type) {
+      const buttons = event.target.parentElement.children;
+      Array.from(buttons).forEach(btn => {
+        btn.classList.remove('bg-amber-600', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-700');
+      });
+      event.target.classList.remove('bg-gray-200', 'text-gray-700');
+      event.target.classList.add('bg-amber-600', 'text-white');
+
+      try {
+        const tickets = type === 'all' 
+          ? await API.getSupportTickets()
+          : await API.getSupportTickets({ userType: type });
+        renderTickets(tickets);
+      } catch (error) {
+        console.error('Error filtering tickets:', error);
+      }
+    }
+
+    async function openTicketModal(ticketId) {
+      try {
+        const ticket = await API.getSupportTicketById(ticketId);
+        if (!ticket) return;
+
+        currentTicketId = ticketId;
+        document.getElementById('modal-ticket-subject').textContent = ticket.subject;
+        document.getElementById('modal-ticket-id').textContent = ticket.ticketId;
+      document.getElementById('modal-ticket-user').textContent = ticket.userName;
+      document.getElementById('modal-ticket-type').textContent = ticket.userType;
+      document.getElementById('modal-ticket-priority').textContent = ticket.priority;
+        document.getElementById('modal-ticket-message').textContent = ticket.message;
+        document.getElementById('modal-ticket-status').value = ticket.status;
+        document.getElementById('ticket-modal').classList.remove('hidden');
+      } catch (error) {
+        console.error('Error loading ticket:', error);
+        alert('Failed to load ticket details');
+      }
+    }
+
+    async function updateTicket() {
+      const status = document.getElementById('modal-ticket-status').value;
+      const response = document.getElementById('admin-response').value;
+
+      try {
+        await API.updateTicketStatus(currentTicketId, status);
+        
+        if (response.trim()) {
+          await API.addTicketResponse(currentTicketId, {
+            message: response,
+            responderName: 'Admin',
+            responderType: 'admin'
+          });
+        }
+
+        closeModal('ticket-modal');
+        loadSupport();
+        alert('Ticket updated successfully!');
+      } catch (error) {
+        console.error('Error updating ticket:', error);
+        alert('Failed to update ticket');
+      }
+    }
+
+    // Modal Functions
+    function openAddSellerModal() {
+      document.getElementById('add-seller-modal').classList.remove('hidden');
+    }
+
+    function openAddPromoModal() {
+      document.getElementById('add-promo-modal').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    document.getElementById('add-promo-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const promo = {
+        id: 'PROMO-' + Date.now(),
+        name: formData.get(0),
+        code: formData.get(1),
+        discount: formData.get(2),
+        start: formData.get(3),
+        end: formData.get(4)
+      };
+      promotions.push(promo);
+      localStorage.setItem('promotions', JSON.stringify(promotions));
+      closeModal('add-promo-modal');
+      loadPromotions();
+    });
+
+    function saveBannerContent() {
+      alert('Banner content saved!');
+    }
+
+    function logout() {
+      window.location.href = 'index.html';
+    }
+
+    // Initialize
+    loadDashboard();
+    loadSupport();
+
+    // Initialize AI Chatbot for Admins
+    const GEMINI_API_KEY = 'AIzaSyD3EZAjIV5vNvJR2Gdo41lqrQ8Jy9dwfYM';
+    try {
+      window.homeGoChatbot = new HomeGoChatbot(GEMINI_API_KEY, {
+        allowedRoles: ['admin']
+      });
+      console.log('✅ Chatbot initialized for admin');
+    } catch (error) {
+      console.error('❌ Chatbot error:', error);
+    }
+  </script>
+</body>
+</html>

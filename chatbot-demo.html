@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeGo with AI Chatbot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex justify-between items-center">
+        <a href="index.html" class="text-2xl font-bold text-amber-600">HomeGo</a>
+        <div class="flex items-center space-x-6">
+          <a href="index.html" class="text-gray-700 hover:text-amber-600">Home</a>
+          <a href="seller.html" class="text-gray-700 hover:text-amber-600">Seller</a>
+          <a href="admin.html" class="text-gray-700 hover:text-amber-600">Admin</a>
+          <a href="customer-support.html" class="text-gray-700 hover:text-amber-600">Support</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    <div class="text-center">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6">
+        Welcome to HomeGo
+      </h1>
+      <p class="text-xl text-gray-600 mb-8">
+        Experience our AI-powered shopping assistant
+      </p>
+      <div class="bg-white rounded-2xl shadow-lg p-8 max-w-3xl mx-auto">
+        <div class="flex items-center justify-center space-x-4 mb-6">
+          <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+          </div>
+          <div class="text-left">
+            <h2 class="text-2xl font-bold text-gray-900">AI Assistant</h2>
+            <p class="text-gray-600">Powered by Google Gemini</p>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 mb-6">
+          <h3 class="font-semibold text-gray-900 mb-3">✨ Features:</h3>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-amber-600 mr-2">🛋️</span>
+              <span><strong>Smart Product Search:</strong> Find furniture based on natural language queries</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-amber-600 mr-2">📦</span>
+              <span><strong>Order Tracking:</strong> Get instant updates on your orders</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-amber-600 mr-2">💡</span>
+              <span><strong>Personalized Help:</strong> Context-aware responses based on your account</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-amber-600 mr-2">🔗</span>
+              <span><strong>MongoDB Integration:</strong> Real-time data from your database</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <p class="text-sm text-blue-800">
+            <strong>👉 Look at the bottom-right corner!</strong><br>
+            Click the chat button to start talking with our AI assistant.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white border-2 border-gray-200 rounded-lg p-4 hover:border-amber-600 transition">
+            <div class="text-3xl mb-2">🤖</div>
+            <h4 class="font-semibold text-gray-900 mb-1">AI-Powered</h4>
+            <p class="text-sm text-gray-600">Google Gemini Pro integration</p>
+          </div>
+          <div class="bg-white border-2 border-gray-200 rounded-lg p-4 hover:border-amber-600 transition">
+            <div class="text-3xl mb-2">💾</div>
+            <h4 class="font-semibold text-gray-900 mb-1">Real Data</h4>
+            <p class="text-sm text-gray-600">Connected to MongoDB backend</p>
+          </div>
+          <div class="bg-white border-2 border-gray-200 rounded-lg p-4 hover:border-amber-600 transition">
+            <div class="text-3xl mb-2">⚡</div>
+            <h4 class="font-semibold text-gray-900 mb-1">Instant</h4>
+            <p class="text-sm text-gray-600">Fast responses with context</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 bg-amber-50 rounded-2xl p-8 max-w-3xl mx-auto border-2 border-amber-200">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">💬 Try asking:</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
+          <div class="bg-white rounded-lg p-3 text-sm">
+            "Show me available sofas"
+          </div>
+          <div class="bg-white rounded-lg p-3 text-sm">
+            "What's the status of my order?"
+          </div>
+          <div class="bg-white rounded-lg p-3 text-sm">
+            "I need a table for my dining room"
+          </div>
+          <div class="bg-white rounded-lg p-3 text-sm">
+            "How do I return an item?"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Dependencies -->
+  <script src="api.js"></script>
+  <script src="chatbot.js"></script>
+  
+  <!-- Chatbot will automatically initialize and appear in bottom-right corner -->
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Integration Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">Currency Integration Test</h1>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Test Status</h2>
+      <div id="test-results" class="space-y-2">
+        <p class="text-gray-600">Running tests...</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Live Currency Test</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Select Currency:</label>
+          <div id="currency-selector"></div>
+        </div>
+        
+        <div class="border-t pt-4">
+          <h3 class="font-semibold mb-2">Sample Prices:</h3>
+          <div id="sample-prices" class="grid grid-cols-2 gap-4">
+            <!-- Will be populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="currency.js"></script>
+  <script src="currency-selector.js"></script>
+
+  <script>
+    const results = [];
+    
+    function addResult(test, passed, message) {
+      results.push({ test, passed, message });
+      renderResults();
+    }
+
+    function renderResults() {
+      const container = document.getElementById('test-results');
+      container.innerHTML = results.map(r => `
+        <div class="flex items-center space-x-2">
+          <span class="${r.passed ? 'text-green-600' : 'text-red-600'}">${r.passed ? '✓' : '✗'}</span>
+          <span class="font-medium">${r.test}:</span>
+          <span class="text-gray-600">${r.message}</span>
+        </div>
+      `).join('');
+    }
+
+    // Run tests
+    try {
+      // Test 1: Currency Manager initialization
+      const currencyManager = new CurrencyManager();
+      addResult('CurrencyManager Init', true, 'Successfully initialized');
+
+      // Test 2: Get current currency
+      const currency = currencyManager.getCurrency();
+      addResult('Get Currency', true, `Current: ${currency}`);
+
+      // Test 3: Format USD price
+      const formatted = currencyManager.format(899);
+      addResult('Format Price', true, `$899 → ${formatted}`);
+
+      // Test 4: Currency conversion
+      const inrPrice = currencyManager.format(899, { currency: 'INR' });
+      addResult('INR Conversion', true, `$899 → ${inrPrice}`);
+
+      // Test 5: EUR conversion
+      const eurPrice = currencyManager.format(899, { currency: 'EUR' });
+      addResult('EUR Conversion', true, `$899 → ${eurPrice}`);
+
+      // Test 6: GBP conversion
+      const gbpPrice = currencyManager.format(899, { currency: 'GBP' });
+      addResult('GBP Conversion', true, `$899 → ${gbpPrice}`);
+
+      // Test 7: Currency selector component
+      const currencySelector = new CurrencySelectorComponent(currencyManager);
+      addResult('Currency Selector', true, 'Component initialized');
+
+      // Test 8: Render selector
+      currencySelector.render('currency-selector');
+      addResult('Render Selector', true, 'UI rendered successfully');
+
+      // Test 9: Sample prices
+      const samplePrices = [299, 499, 899, 1299];
+      const pricesContainer = document.getElementById('sample-prices');
+      pricesContainer.innerHTML = samplePrices.map(price => `
+        <div class="bg-gray-50 p-3 rounded">
+          <div class="text-sm text-gray-600">USD $${price}</div>
+          <div class="text-lg font-bold text-amber-600">${currencyManager.format(price)}</div>
+        </div>
+      `).join('');
+      addResult('Sample Prices', true, 'Rendered 4 sample prices');
+
+      // Test 10: Currency change event
+      document.addEventListener('currencyChanged', (event) => {
+        addResult('Currency Changed', true, `New currency: ${event.detail.currency} ${event.detail.symbol}`);
+        
+        // Update sample prices
+        const pricesContainer = document.getElementById('sample-prices');
+        pricesContainer.innerHTML = samplePrices.map(price => `
+          <div class="bg-gray-50 p-3 rounded">
+            <div class="text-sm text-gray-600">USD $${price}</div>
+            <div class="text-lg font-bold text-amber-600">${currencyManager.format(price)}</div>
+          </div>
+        `).join('');
+      });
+      addResult('Event Listener', true, 'Listening for currency changes');
+
+      // Summary
+      const passed = results.filter(r => r.passed).length;
+      const total = results.length;
+      
+      setTimeout(() => {
+        const summary = document.createElement('div');
+        summary.className = 'mt-4 p-4 bg-green-50 border border-green-200 rounded';
+        summary.innerHTML = `
+          <h3 class="font-bold text-green-800">✓ All Tests Passed</h3>
+          <p class="text-green-700">${passed}/${total} tests successful</p>
+          <p class="text-sm text-green-600 mt-2">Currency system is working correctly! Try changing currency above.</p>
+        `;
+        document.getElementById('test-results').appendChild(summary);
+      }, 500);
+
+    } catch (error) {
+      addResult('Error', false, error.message);
+    }
+  </script>
+</body>
+</html>

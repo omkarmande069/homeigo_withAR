@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - HomeGo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amber: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+
+  <!-- Navigation -->
+  <nav id="navigation" class="bg-white shadow-lg sticky top-0 z-40">
+    <!-- Navigation content will be injected by JS -->
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Dashboard Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+      <p class="text-gray-600 mt-2">Platform overview, user management, and system analytics.</p>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <!-- Profile Card -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center space-x-4 mb-6">
+            <div id="user-avatar" class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+              <!-- User avatar will be injected by JS -->
+            </div>
+            <div>
+              <h2 id="user-name" class="text-xl font-semibold text-gray-900">Loading...</h2>
+              <p id="user-email" class="text-gray-600">Loading...</p>
+              <span class="inline-block mt-1 px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Admin</span>
+            </div>
+          </div>
+          
+          <div class="space-y-4">
+            <button id="edit-profile" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">
+              Edit Profile
+            </button>
+            <button id="system-settings" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+              System Settings
+            </button>
+            <button onclick="window.location.href='index.html'" class="w-full border border-amber-300 text-amber-700 py-2 px-4 rounded-lg hover:bg-amber-50 transition-colors">
+              View Website
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Stats Cards -->
+      <div class="lg:col-span-3">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+              <div class="p-2 bg-blue-100 rounded-lg">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Users</p>
+                <p id="total-users" class="text-2xl font-semibold text-gray-900">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+              <div class="p-2 bg-green-100 rounded-lg">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Products</p>
+                <p id="total-products" class="text-2xl font-semibold text-gray-900">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+              <div class="p-2 bg-amber-100 rounded-lg">
+                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Orders</p>
+                <p id="total-orders" class="text-2xl font-semibold text-gray-900">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+              <div class="p-2 bg-purple-100 rounded-lg">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Revenue</p>
+                <p id="total-revenue" class="text-2xl font-semibold text-gray-900">$0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="bg-white rounded-lg shadow-md mb-8">
+          <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-900">User Management</h3>
+            <div class="flex space-x-2">
+              <select id="userTypeFilter" class="border border-gray-300 rounded-md px-3 py-1 text-sm">
+                <option value="all">All Users</option>
+                <option value="customer">Customers</option>
+                <option value="seller">Sellers</option>
+                <option value="admin">Admins</option>
+              </select>
+              <button id="addUserBtn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                Add User
+              </button>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                  <!-- Users will be inserted here -->
+                  <tr class="text-center text-gray-500">
+                    <td colspan="5" class="py-8">Loading users...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Analytics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Recent Activity -->
+          <div class="bg-white rounded-lg shadow-md">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+            </div>
+            <div class="p-6">
+              <div id="recentActivity" class="space-y-4">
+                <!-- Activity items will be loaded here -->
+                <div class="text-center text-gray-500 py-8">
+                  <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                  </svg>
+                  <p>No recent activity</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Platform Health -->
+          <div class="bg-white rounded-lg shadow-md">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-900">Platform Health</h3>
+            </div>
+            <div class="p-6">
+              <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-600">Server Status</span>
+                  <span id="server-status" class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Online</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-600">Database</span>
+                  <span id="database-status" class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Connected</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-600">Payment System</span>
+                  <span id="payment-status" class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Active</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-600">Email Service</span>
+                  <span id="email-status" class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Actions -->
+    <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Admin Actions</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <button id="manageUsers" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          </svg>
+          <span class="font-medium">Manage Users</span>
+        </button>
+        
+        <button id="systemReports" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <span class="font-medium">System Reports</span>
+        </button>
+        
+        <button id="backupData" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-amber-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+          </svg>
+          <span class="font-medium">Backup Data</span>
+        </button>
+        
+        <button id="systemLogs" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span class="font-medium">System Logs</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- User Modal -->
+  <div id="userModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h3 id="userModalTitle" class="text-lg font-semibold text-gray-900">User Details</h3>
+        <button id="closeUserModal" class="text-gray-400 hover:text-gray-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <form id="userForm" class="p-6">
+        <div class="space-y-4">
+          <div>
+            <label for="userFullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+            <input type="text" id="userFullName" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+          </div>
+          <div>
+            <label for="userEmail" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="userEmail" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+          </div>
+          <div>
+            <label for="userType" class="block text-sm font-medium text-gray-700">User Type</label>
+            <select id="userType" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500">
+              <option value="customer">Customer</option>
+              <option value="seller">Seller</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div>
+            <label for="userStatus" class="block text-sm font-medium text-gray-700">Status</label>
+            <select id="userStatus" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500">
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="banned">Banned</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-end space-x-3">
+          <button type="button" id="cancelUserBtn" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+            Cancel
+          </button>
+          <button type="submit" class="bg-red-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-red-700">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer" class="bg-gray-900 text-white py-12 mt-16">
+    <!-- Footer content will be injected by JS -->
+  </footer>
+
+  <!-- Configuration -->
+  <script src="config.js"></script>
+  
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Initialize Supabase using config
+    window.supabase = supabase.createClient(config.supabase.url, config.supabase.anonKey);
+  </script>
+  
+  <!-- Session Management -->
+  <script src="session.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <!-- Admin Dashboard Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Initialize Session Manager
+      const sessionManager = new SessionManager();
+      
+      // Check if user is authenticated and is an admin
+      const isAuthenticated = await sessionManager.requireAuth();
+      if (!isAuthenticated) {
+        return; // Will redirect to login
+      }
+      
+      if (!sessionManager.isAdmin()) {
+        // Redirect to appropriate dashboard
+        window.location.href = sessionManager.getDashboardUrl();
+        return;
+      }
+      
+      // Render navigation
+      const renderNavigation = () => {
+        const navigationEl = document.getElementById('navigation');
+        const userName = sessionManager.getUserName();
+        
+        navigationEl.innerHTML = `
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+              <a href="index.html" class="text-2xl font-bold text-amber-600">HomeGo Admin</a>
+              <div class="hidden md:flex items-center space-x-8">
+                <a href="admin-dashboard.html" class="text-red-600 font-medium">Admin Panel</a>
+                <a href="index.html" class="text-gray-700 hover:text-amber-600 transition-colors">View Site</a>
+              </div>
+              <div class="flex items-center space-x-4">
+                <div class="relative">
+                  <button id="user-menu-button" class="flex items-center space-x-2 p-2 text-gray-700 hover:text-amber-600 transition-colors">
+                    <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                      ${userName.charAt(0).toUpperCase()}
+                    </div>
+                    <span class="hidden md:block text-sm text-gray-700">${userName}</span>
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </button>
+                  <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                    <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                      <div class="font-medium">${userName}</div>
+                      <div class="text-gray-500">${sessionManager.getUserEmail()}</div>
+                    </div>
+                    <a href="admin-dashboard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Admin Panel</a>
+                    <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add event listeners for user menu
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userMenu = document.getElementById('user-menu');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        userMenuButton?.addEventListener('click', () => {
+          userMenu.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!userMenuButton?.contains(e.target) && !userMenu?.contains(e.target)) {
+            userMenu?.classList.add('hidden');
+          }
+        });
+        
+        logoutBtn?.addEventListener('click', async () => {
+          await sessionManager.logout();
+        });
+      };
+      
+      // Update user info
+      const updateUserInfo = () => {
+        const userName = sessionManager.getUserName();
+        const userEmail = sessionManager.getUserEmail();
+        const userAvatar = document.getElementById('user-avatar');
+        const userNameEl = document.getElementById('user-name');
+        const userEmailEl = document.getElementById('user-email');
+        
+        if (userAvatar) {
+          userAvatar.textContent = userName.charAt(0).toUpperCase();
+        }
+        if (userNameEl) {
+          userNameEl.textContent = userName;
+        }
+        if (userEmailEl) {
+          userEmailEl.textContent = userEmail;
+        }
+      };
+      
+      // Load admin dashboard data
+      const loadDashboardData = async () => {
+        try {
+          // Load system statistics
+          const [usersResponse, productsResponse, ordersResponse] = await Promise.all([
+            fetch('http://localhost:3000/api/admin/users', { headers: sessionManager.getAuthHeaders() }),
+            fetch('http://localhost:3000/api/admin/products', { headers: sessionManager.getAuthHeaders() }),
+            fetch('http://localhost:3000/api/admin/orders', { headers: sessionManager.getAuthHeaders() })
+          ]);
+          
+          if (usersResponse.ok) {
+            const users = await usersResponse.json();
+            document.getElementById('total-users').textContent = users.length;
+            
+            // Load users table
+            const usersTableBody = document.getElementById('usersTableBody');
+            if (users.length > 0) {
+              usersTableBody.innerHTML = users.map(user => `
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white font-medium">
+                        ${user.fullName.charAt(0).toUpperCase()}
+                      </div>
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">${user.fullName}</div>
+                        <div class="text-sm text-gray-500">${user.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      user.userType === 'admin' ? 'bg-red-100 text-red-800' :
+                      user.userType === 'seller' ? 'bg-amber-100 text-amber-800' :
+                      'bg-blue-100 text-blue-800'
+                    }">${user.userType}</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      user.status === 'active' ? 'bg-green-100 text-green-800' :
+                      user.status === 'suspended' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }">${user.status || 'active'}</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${new Date(user.createdAt).toLocaleDateString()}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button onclick="editUser('${user._id}')" class="text-red-600 hover:text-red-900 mr-3">Edit</button>
+                    <button onclick="toggleUserStatus('${user._id}')" class="text-gray-600 hover:text-gray-900">
+                      ${user.status === 'active' ? 'Suspend' : 'Activate'}
+                    </button>
+                  </td>
+                </tr>
+              `).join('');
+            }
+          }
+          
+          if (productsResponse.ok) {
+            const products = await productsResponse.json();
+            document.getElementById('total-products').textContent = products.length;
+          }
+          
+          if (ordersResponse.ok) {
+            const orders = await ordersResponse.json();
+            document.getElementById('total-orders').textContent = orders.length;
+            const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+            document.getElementById('total-revenue').textContent = `$${totalRevenue.toFixed(2)}`;
+          }
+          
+        } catch (error) {
+          console.error('Error loading admin dashboard data:', error);
+        }
+      };
+      
+      // Event listeners
+      document.getElementById('edit-profile')?.addEventListener('click', () => {
+        alert('Edit profile functionality coming soon!');
+      });
+      
+      document.getElementById('system-settings')?.addEventListener('click', () => {
+        alert('System settings functionality coming soon!');
+      });
+      
+      document.getElementById('manageUsers')?.addEventListener('click', () => {
+        alert('Advanced user management coming soon!');
+      });
+      
+      document.getElementById('systemReports')?.addEventListener('click', () => {
+        alert('System reports functionality coming soon!');
+      });
+      
+      document.getElementById('backupData')?.addEventListener('click', () => {
+        alert('Data backup functionality coming soon!');
+      });
+      
+      document.getElementById('systemLogs')?.addEventListener('click', () => {
+        alert('System logs functionality coming soon!');
+      });
+      
+      document.getElementById('addUserBtn')?.addEventListener('click', () => {
+        alert('Add user functionality coming soon!');
+      });
+      
+      // Initialize dashboard
+      renderNavigation();
+      updateUserInfo();
+      await loadDashboardData();
+      
+      console.log('⚡ Admin Dashboard initialized');
+    });
+  </script>
+</body>
+</html>

@@ -474,14 +474,6 @@
           </div>
 
           <div class="form-group">
-            <label for="loginUserType">I am a:</label>
-            <select id="loginUserType" name="userType" class="w-full p-4 border-2 border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-amber-500 transition-colors">
-              <option value="customer">Customer</option>
-              <option value="seller">Seller</option>
-            </select>
-          </div>
-
-          <div class="form-group">
             <label for="loginEmail">Email Address</label>
             <input type="email" id="loginEmail" name="email" required>
             <div class="error-message">Please enter a valid email address</div>
@@ -644,10 +636,8 @@
     </div>
   </div>
 
-  <script src="session.js"></script>
+  <script src="api.js"></script>
   <script>
-    // Initialize SessionManager
-    const sessionManager = new SessionManager();
 
     // DOM Elements
     const loginForm = document.getElementById('loginForm');
@@ -851,29 +841,44 @@
       try {
         console.log('Starting login process...');
         
-        const userType = document.getElementById('loginUserType').value;
-        const response = await sessionManager.login(email, password);
+        // Call MongoDB API - auto-detects user type
+        const response = await API.request('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+        
         console.log('Login response:', response);
-
-        // Redirect based on user type
-        if (response.user.userType === 'seller') {
-          window.location.href = 'dashboard.html';
-        } else {
-          window.location.href = 'index.html';
-        }
+        
+        // Store user session
+        const sessionData = {
+          userId: response.userId,
+          email: response.email,
+          name: response.name,
+          userType: response.userType,
+          token: response.token
+        };
+        
+        localStorage.setItem('userSession', JSON.stringify(sessionData));
         
         // Success
         showMessage('loginSuccess', 'Login successful! Redirecting...');
         
-        // Set session in SessionManager
-        sessionManager.currentUser = data.user;
-        sessionManager.isAuthenticated = true;
-        sessionManager.onAuthStateChange('SIGNED_IN', data.session);
-        
+        // Redirect based on user type
         setTimeout(() => {
-          // Redirect to home page
-          window.location.href = 'index.html';
-        }, 2000);
+          switch(response.userType) {
+            case 'customer':
+              window.location.href = 'index.html';
+              break;
+            case 'seller':
+              window.location.href = 'seller.html';
+              break;
+            case 'admin':
+              window.location.href = 'admin.html';
+              break;
+            default:
+              window.location.href = 'index.html';
+          }
+        }, 1000);
         
       } catch (error) {
         console.error('Login error:', error);
@@ -942,7 +947,10 @@
         console.log('Starting signup process...');
         
         const userType = document.getElementById('signupUserType').value;
-        const response = await sessionManager.register(email, password, name, userType);
+        const response = await API.request('/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({ email, password, name, userType })
+        });
         console.log('Signup response:', response);
         
         // Success

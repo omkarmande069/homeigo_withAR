@@ -4,6 +4,7 @@ class SessionManager {
         this.currentUser = null;
         this.isAuthenticated = false;
         this.token = localStorage.getItem('token');
+        this.initPromise = null;
         
         // Bind methods
         this.checkAuth = this.checkAuth.bind(this);
@@ -14,13 +15,19 @@ class SessionManager {
         this.isLoggedIn = this.isLoggedIn.bind(this);
         
         // Initialize
-        this.init();
+        this.initPromise = this.init();
     }
 
     async init() {
+        console.log('🔐 SessionManager: Initializing...');
         if (this.token) {
+            console.log('🔑 Token found, checking authentication...');
             await this.checkAuth();
+        } else {
+            console.log('⚠️ No token found, user not authenticated');
         }
+        console.log(`✅ SessionManager initialized. Authenticated: ${this.isAuthenticated}`);
+        return this.isAuthenticated;
     }
 
     async checkAuth() {
@@ -30,6 +37,7 @@ class SessionManager {
         }
 
         try {
+            console.log('🔍 Checking authentication with server...');
             const response = await fetch('http://localhost:3000/api/user/profile', {
                 headers: {
                     'Authorization': `Bearer ${this.token}`
@@ -40,14 +48,16 @@ class SessionManager {
                 const user = await response.json();
                 this.currentUser = user;
                 this.isAuthenticated = true;
+                console.log('✅ Authentication successful:', user.email, `(${user.userType})`);
                 this.onAuthStateChange('SIGNED_IN', { user });
                 return true;
             } else {
+                console.warn('❌ Authentication failed, status:', response.status);
                 this.logout();
                 return false;
             }
         } catch (error) {
-            console.error('Auth check error:', error);
+            console.error('❌ Auth check error:', error);
             this.logout();
             return false;
         }
@@ -118,6 +128,21 @@ class SessionManager {
         window.location.href = 'login.html';
     }
 
+    // Require authentication and redirect to appropriate dashboard if not on correct page
+    async requireAuth() {
+        console.log('🔒 Checking authentication requirement...');
+        // Wait for initialization to complete
+        await this.initPromise;
+        
+        if (!this.isAuthenticated) {
+            console.warn('⛔ User not authenticated, redirecting to login...');
+            window.location.href = 'login.html';
+            return false;
+        }
+        console.log('✅ User authenticated, continuing...');
+        return true;
+    }
+
     getUser() {
         return this.currentUser;
     }
@@ -136,6 +161,37 @@ class SessionManager {
     
     getUserType() {
         return this.currentUser?.userType || 'customer';
+    }
+
+    // Check if user has specific role
+    hasRole(role) {
+        return this.getUserType() === role;
+    }
+
+    isCustomer() {
+        return this.hasRole('customer');
+    }
+
+    isSeller() {
+        return this.hasRole('seller');
+    }
+
+    isAdmin() {
+        return this.hasRole('admin');
+    }
+
+    // Get appropriate dashboard URL based on user role
+    getDashboardUrl() {
+        const userType = this.getUserType();
+        switch(userType) {
+            case 'admin':
+                return 'admin-dashboard.html';
+            case 'seller':
+                return 'seller-dashboard.html';
+            case 'customer':
+            default:
+                return 'customer-dashboard.html';
+        }
     }
 
     onAuthStateChange(event, session) {

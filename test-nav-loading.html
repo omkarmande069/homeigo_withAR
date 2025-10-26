@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigation Loading Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Same CSS as style.css */
+    .loading-placeholder {
+      opacity: 1;
+      transition: opacity 0.2s ease-out;
+    }
+
+    #navigation.loaded .loading-placeholder {
+      display: none;
+    }
+
+    #navigation {
+      transition: opacity 0.15s ease-in;
+    }
+
+    #navigation > div:not(.loading-placeholder) {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  
+  <div class="max-w-4xl mx-auto p-8">
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">🔄 Navigation Loading Test</h1>
+      <p class="text-gray-600 mb-4">Testing smooth navigation loading without flash</p>
+      
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <p class="text-sm text-blue-800">
+          <strong>What should happen:</strong><br>
+          1. Skeleton loader shows for ~500ms<br>
+          2. Real navigation fades in smoothly<br>
+          3. No flash or blink
+        </p>
+      </div>
+
+      <button onclick="testReload()" class="bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700">
+        🔄 Test Reload
+      </button>
+    </div>
+
+    <!-- Navigation Test Area -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <nav id="navigation" class="bg-white shadow-lg" style="min-height: 64px;">
+        <!-- Loading Placeholder (skeleton) -->
+        <div class="loading-placeholder max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            <div class="h-8 w-32 bg-gray-200 rounded animate-pulse"></div>
+            <div class="hidden md:flex space-x-4">
+              <div class="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+              <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+              <div class="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+              <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+            <div class="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="p-6">
+        <p class="text-gray-600 text-sm">Content below navigation</p>
+      </div>
+    </div>
+
+    <div class="mt-6 bg-gray-100 rounded-lg p-4">
+      <p class="text-sm text-gray-700 mb-2"><strong>Status:</strong></p>
+      <div id="status" class="text-sm font-mono">Waiting...</div>
+    </div>
+  </div>
+
+  <script>
+    function updateStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    function testReload() {
+      location.reload();
+    }
+
+    // Simulate script.js loading delay
+    updateStatus('⏳ Loading scripts...');
+
+    setTimeout(() => {
+      updateStatus('✅ Scripts loaded, rendering navigation...');
+      
+      const nav = document.getElementById('navigation');
+      
+      // Mark as loaded (hides skeleton)
+      nav.classList.add('loaded');
+      
+      // Render real navigation
+      nav.innerHTML = `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            <div class="text-2xl font-bold text-amber-600">HomeGo</div>
+            <div class="hidden md:flex items-center space-x-8">
+              <a href="#" class="text-gray-700 hover:text-amber-600">Home</a>
+              <a href="#" class="text-gray-700 hover:text-amber-600">Products</a>
+              <a href="#" class="text-gray-700 hover:text-amber-600">About</a>
+              <a href="#" class="text-gray-700 hover:text-amber-600">Contact</a>
+              <a href="#" class="text-gray-700 hover:text-amber-600">Login</a>
+            </div>
+            <div class="flex items-center space-x-4">
+              <button class="p-2 text-gray-700 hover:text-amber-600 relative">
+                🛒
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      updateStatus('✅ Navigation rendered! (Should have faded in smoothly)');
+    }, 500); // Simulate loading delay
+  </script>
+</body>
+</html>

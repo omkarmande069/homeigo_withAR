@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot Test - HomeGo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  
+  <div class="max-w-4xl mx-auto p-8">
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">🤖 Chatbot Test Page</h1>
+      <p class="text-gray-600 mb-4">This page tests the AI chatbot functionality.</p>
+      
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <p class="text-sm text-blue-800">
+          <strong>✅ What should happen:</strong><br>
+          - Chatbot button appears in bottom-right corner<br>
+          - Click it to open the chat window<br>
+          - Type a message and get AI response
+        </p>
+      </div>
+
+      <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+        <p class="text-sm text-green-800">
+          <strong>🎯 Test Actions:</strong><br>
+          1. Look for floating chat button in bottom-right<br>
+          2. Click the button to open chat<br>
+          3. Try quick action buttons<br>
+          4. Type "Hello" and send<br>
+          5. Wait for AI response
+        </p>
+      </div>
+
+      <div id="status" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <p class="text-sm text-yellow-800">
+          <strong>Status:</strong> <span id="status-text">Loading chatbot...</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Debug Info</h2>
+      <div class="space-y-2 text-sm font-mono">
+        <div><strong>API Loaded:</strong> <span id="api-status">❌</span></div>
+        <div><strong>Chatbot Class:</strong> <span id="class-status">❌</span></div>
+        <div><strong>Initialized:</strong> <span id="init-status">❌</span></div>
+        <div><strong>DOM Ready:</strong> <span id="dom-status">❌</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Dependencies -->
+  <script src="api.js"></script>
+  <script src="chatbot.js"></script>
+  
+  <script>
+    // Debug status updates
+    function updateStatus(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    // Check API loaded
+    if (typeof API !== 'undefined') {
+      updateStatus('api-status', '✅ Loaded');
+    }
+
+    // Check chatbot class
+    if (typeof HomeGoChatbot !== 'undefined') {
+      updateStatus('class-status', '✅ Available');
+    }
+
+    // Initialize on load
+    window.addEventListener('load', function() {
+      updateStatus('dom-status', '✅ Ready');
+      updateStatus('status-text', 'Initializing...');
+
+      try {
+        const GEMINI_API_KEY = 'AIzaSyD3EZAjIV5vNvJR2Gdo41lqrQ8Jy9dwfYM';
+        
+        // Set a test session
+        localStorage.setItem('userSession', JSON.stringify({
+          userId: 'test-user',
+          email: 'test@example.com',
+          name: 'Test User',
+          role: 'customer'
+        }));
+
+        window.homeGoChatbot = new HomeGoChatbot(GEMINI_API_KEY, {
+          allowedRoles: ['customer']
+        });
+        
+        updateStatus('init-status', '✅ Success');
+        updateStatus('status-text', '✅ Chatbot ready! Look for button in bottom-right corner.');
+        
+        console.log('✅ Chatbot initialized successfully');
+      } catch (error) {
+        updateStatus('init-status', '❌ Failed');
+        updateStatus('status-text', '❌ Error: ' + error.message);
+        console.error('❌ Chatbot initialization error:', error);
+      }
+    });
+  </script>
+</body>
+</html>

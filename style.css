@@ -7,3 +7,32 @@ body {
 .hidden {
   display: none;
 }
+
+/* Navigation loading state */
+#navigation .loading-placeholder {
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+}
+
+#navigation.loaded .loading-placeholder {
+  display: none;
+}
+
+/* Prevent navigation flash */
+#navigation {
+  transition: opacity 0.15s ease-in;
+}
+
+/* Smooth fade-in for navigation content */
+#navigation > div:not(.loading-placeholder) {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

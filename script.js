@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Session Manager
   const sessionManager = new SessionManager();
   
+  // Initialize Currency Manager
+  const currencyManager = new CurrencyManager();
+  const currencySelector = new CurrencySelectorComponent(currencyManager);
+  
   // State Management
   const state = {
     currentPage: 'home',
@@ -66,6 +70,16 @@ document.addEventListener('DOMContentLoaded', () => {
     renderNavigation(); // Re-render navigation when auth state changes
     lucide.createIcons();
   });
+  
+  // Listen for currency changes
+  document.addEventListener('currencyChanged', (event) => {
+    console.log('💱 Currency changed:', event.detail);
+    // Re-render pages to update prices
+    renderHomePage();
+    renderProductsPage();
+    renderCartPage();
+    renderCurrentPage();
+  });
 
   const renderCurrentPage = () => {
     Object.values(pageEls).forEach(el => el.classList.add('hidden'));
@@ -77,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const renderNavigation = () => {
     const isLoggedIn = sessionManager.isLoggedIn();
     const userName = sessionManager.getUserName();
+    
+    // Mark navigation as loaded to hide skeleton
+    navigationEl.classList.add('loaded');
     
     navigationEl.innerHTML = `
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -90,6 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ${!isLoggedIn ? '<a href="login.html" data-login-link class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Login</a>' : ''}
           </div>
           <div class="flex items-center space-x-4">
+            <!-- Currency Selector -->
+            <div id="currency-selector"></div>
+            
             <div class="relative hidden md:block">
               <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
               <input id="search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500">
@@ -116,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="font-medium">${userName}</div>
                     <div class="text-gray-500">${sessionManager.getUserEmail()}</div>
                   </div>
-                  <a href="dashboard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                    <a href="${sessionManager.getDashboardUrl()}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
                   <a href="#" data-page="profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                   <a href="#" data-page="orders" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Orders</a>
                   <a href="#" data-page="wishlist" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
@@ -158,6 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
         await sessionManager.logout();
       });
     }
+    
+    // Render currency selector after navigation is rendered
+    setTimeout(() => {
+      currencySelector.render('currency-selector');
+    }, 0);
   };
 
   const renderHomePage = () => {
@@ -189,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="p-6">
                   <h3 class="text-xl font-semibold text-gray-900 mb-2">${product.name}</h3>
-                  <p class="text-2xl font-bold text-amber-600 mb-4">$${product.price}</p>
+                  <p class="text-2xl font-bold text-amber-600 mb-4">${currencyManager.format(product.price)}</p>
                   <button class="w-full bg-gray-900 text-white py-3 rounded-full hover:bg-gray-800 transition-colors font-semibold">View Details</button>
                 </div>
               </div>
@@ -222,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="p-4">
                   <h3 class="font-semibold text-gray-900 mb-2">${product.name}</h3>
-                  <p class="text-lg font-bold text-amber-600">$${product.price}</p>
+                  <p class="text-lg font-bold text-amber-600">${currencyManager.format(product.price)}</p>
                   <button class="add-to-cart-btn w-full mt-2 bg-amber-600 text-white py-2 rounded-lg font-semibold hover:bg-amber-700 transition-colors" data-add-product="${product.id}">Add to Cart</button>
                 </div>
               </div>
@@ -272,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg">
                   <div class="flex-1">
                     <h3 class="font-semibold text-gray-900">${item.name}</h3>
-                    <p class="text-gray-600">$${item.price}</p>
+                    <p class="text-gray-600">${currencyManager.format(item.price)}</p>
                   </div>
                   <div class="flex items-center space-x-3">
                     <button data-item-id="${item.id}" data-change="-1" class="cart-quantity-btn p-1 rounded-full bg-gray-100 hover:bg-gray-200"><i data-lucide="minus" class="w-4 h-4"></i></button>
@@ -280,11 +305,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button data-item-id="${item.id}" data-change="1" class="cart-quantity-btn p-1 rounded-full bg-gray-100 hover:bg-gray-200"><i data-lucide="plus" class="w-4 h-4"></i></button>
                   </div>
                   <button data-remove-item="${item.id}" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
-                  <p class="font-bold text-lg text-amber-600">$${item.price * item.quantity}</p>
+                  <p class="font-bold text-lg text-amber-600">${currencyManager.format(item.price * item.quantity)}</p>
                 </div>
               `).join('')}
               <div class="text-right mt-6">
-                <p class="text-2xl font-bold mb-4">Total: $${getCartTotal()}</p>
+                <p class="text-2xl font-bold mb-4">Total: ${currencyManager.format(getCartTotal())}</p>
                 <button id="checkout-btn" class="bg-amber-600 text-white py-3 px-8 rounded-full font-semibold hover:bg-amber-700 transition-colors">Proceed to Checkout</button>
               </div>
             </div>

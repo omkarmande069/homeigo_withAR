@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication Test - HomeGo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">Authentication Test Page</h1>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Current Status</h2>
+      <div id="status" class="space-y-2">
+        <p>Loading...</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+      <div class="space-y-3">
+        <button onclick="testLogin()" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+          Test Login (test@example.com / password123)
+        </button>
+        <button onclick="checkAuth()" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+          Check Authentication
+        </button>
+        <button onclick="clearStorage()" class="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">
+          Clear Storage & Logout
+        </button>
+        <button onclick="goToDashboard()" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700">
+          Go to Dashboard
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Console Logs</h2>
+      <div id="logs" class="bg-gray-900 text-green-400 p-4 rounded font-mono text-sm h-64 overflow-y-auto">
+        <p>Logs will appear here...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="session.js"></script>
+  
+  <script>
+    // Override console.log to show in page
+    const logsDiv = document.getElementById('logs');
+    const originalLog = console.log;
+    const originalWarn = console.warn;
+    const originalError = console.error;
+
+    function addLog(type, ...args) {
+      const time = new Date().toLocaleTimeString();
+      const message = args.map(arg => 
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+      ).join(' ');
+      
+      const logEntry = document.createElement('div');
+      logEntry.className = type === 'error' ? 'text-red-400' : 
+                           type === 'warn' ? 'text-yellow-400' : 'text-green-400';
+      logEntry.textContent = `[${time}] ${message}`;
+      logsDiv.appendChild(logEntry);
+      logsDiv.scrollTop = logsDiv.scrollHeight;
+    }
+
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      addLog('log', ...args);
+    };
+
+    console.warn = function(...args) {
+      originalWarn.apply(console, args);
+      addLog('warn', ...args);
+    };
+
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      addLog('error', ...args);
+    };
+
+    // Initialize session manager
+    let sessionManager;
+    
+    async function init() {
+      console.log('=== Initializing Test Page ===');
+      sessionManager = new SessionManager();
+      await sessionManager.initPromise;
+      updateStatus();
+    }
+
+    function updateStatus() {
+      const statusDiv = document.getElementById('status');
+      const token = localStorage.getItem('token');
+      const isAuth = sessionManager.isLoggedIn();
+      const user = sessionManager.getUser();
+      
+      statusDiv.innerHTML = `
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="font-semibold">Token Exists:</p>
+            <p class="${token ? 'text-green-600' : 'text-red-600'}">${token ? 'Yes ✓' : 'No ✗'}</p>
+          </div>
+          <div>
+            <p class="font-semibold">Is Authenticated:</p>
+            <p class="${isAuth ? 'text-green-600' : 'text-red-600'}">${isAuth ? 'Yes ✓' : 'No ✗'}</p>
+          </div>
+          ${user ? `
+            <div class="col-span-2">
+              <p class="font-semibold">User Info:</p>
+              <pre class="bg-gray-100 p-2 rounded mt-2">${JSON.stringify(user, null, 2)}</pre>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    async function testLogin() {
+      console.log('=== Testing Login ===');
+      try {
+        const result = await sessionManager.login('test@example.com', 'password123');
+        console.log('✅ Login successful:', result);
+        updateStatus();
+      } catch (error) {
+        console.error('❌ Login failed:', error.message);
+      }
+    }
+
+    async function checkAuth() {
+      console.log('=== Checking Authentication ===');
+      const isAuth = await sessionManager.requireAuth();
+      console.log('Authentication result:', isAuth);
+      updateStatus();
+    }
+
+    function clearStorage() {
+      console.log('=== Clearing Storage ===');
+      localStorage.clear();
+      sessionManager.currentUser = null;
+      sessionManager.isAuthenticated = false;
+      sessionManager.token = null;
+      console.log('✅ Storage cleared');
+      updateStatus();
+    }
+
+    function goToDashboard() {
+      const dashboardUrl = sessionManager.getDashboardUrl();
+      console.log('Navigating to:', dashboardUrl);
+      window.location.href = dashboardUrl;
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
