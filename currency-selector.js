@@ -27,7 +27,7 @@ class CurrencySelectorComponent {
                     </svg>
                 </button>
                 
-                <div id="currency-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                <div id="currency-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
                     <div class="py-2">
                         ${currencies.map(curr => `
                             <button 
@@ -39,11 +39,31 @@ class CurrencySelectorComponent {
                                         <span class="text-lg">${curr.symbol}</span>
                                         <span class="text-sm font-medium">${curr.code}</span>
                                     </div>
+                                    <div class="text-sm text-gray-600">
+                                        1 USD = ${curr.rate.toFixed(2)} ${curr.code}
+                                    </div>
                                     ${curr.code === currentCurrency ? '<svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>' : ''}
                                 </div>
                                 <div class="text-xs text-gray-500 ml-6">${curr.name}</div>
                             </button>
                         `).join('')}
+                        <div class="mt-2 pt-2 border-t border-gray-200 px-4 py-2">
+                            <div class="text-xs text-gray-500">
+                                ${(() => {
+                                    const lastUpdate = this.currencyManager.getLastUpdateTime();
+                                    if (lastUpdate) {
+                                        const timeAgo = Math.round((Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60));
+                                        return `Last updated ${timeAgo} hours ago`;
+                                    }
+                                    return 'Using static rates';
+                                })()}
+                            </div>
+                            ${this.currencyManager.needsUpdate() ? `
+                                <button id="update-rates-btn" class="mt-1 text-xs text-amber-600 hover:text-amber-700">
+                                    Update rates
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,13 +85,25 @@ class CurrencySelectorComponent {
         // Toggle dropdown
         button.addEventListener('click', (e) => {
             e.stopPropagation();
+            const isHidden = dropdown.classList.contains('hidden');
             dropdown.classList.toggle('hidden');
+            
+            // Add animation after removing hidden
+            if (isHidden) {
+                requestAnimationFrame(() => {
+                    dropdown.classList.add('dropdown-animate');
+                });
+            }
         });
 
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.add('hidden');
+                dropdown.classList.remove('dropdown-animate');
+                // Wait for animation to finish before hiding
+                setTimeout(() => {
+                    dropdown.classList.add('hidden');
+                }, 200);
             }
         });
 
@@ -89,6 +121,35 @@ class CurrencySelectorComponent {
                 console.log(`💱 Currency changed to ${currency}`);
             });
         });
+
+        // Handle update rates button
+        const updateRatesBtn = document.getElementById('update-rates-btn');
+        if (updateRatesBtn) {
+            updateRatesBtn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                
+                updateRatesBtn.textContent = 'Updating...';
+                updateRatesBtn.disabled = true;
+                
+                try {
+                    await this.currencyManager.updateRates();
+                    
+                    // Re-render to update UI with new rates
+                    const containerId = button.closest('[id]')?.id || 'currency-selector';
+                    this.render(containerId.replace('-button', '').replace('-dropdown', ''));
+                    
+                    console.log('💱 Exchange rates updated');
+                } catch (error) {
+                    console.error('Failed to update rates:', error);
+                    updateRatesBtn.textContent = 'Update failed';
+                    setTimeout(() => {
+                        updateRatesBtn.textContent = 'Update rates';
+                        updateRatesBtn.disabled = false;
+                    }, 3000);
+                }
+            });
+        }
     }
 
     /**

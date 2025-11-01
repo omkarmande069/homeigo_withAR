@@ -5,6 +5,7 @@ class SessionManager {
         this.isAuthenticated = false;
         this.token = localStorage.getItem('token');
         this.initPromise = null;
+        this.cart = JSON.parse(localStorage.getItem('cart')) || [];
         
         // Bind methods
         this.checkAuth = this.checkAuth.bind(this);
@@ -13,6 +14,8 @@ class SessionManager {
         this.logout = this.logout.bind(this);
         this.getUser = this.getUser.bind(this);
         this.isLoggedIn = this.isLoggedIn.bind(this);
+        this.getCart = this.getCart.bind(this);
+        this.updateCart = this.updateCart.bind(this);
         
         // Initialize
         this.initPromise = this.init();
@@ -65,6 +68,7 @@ class SessionManager {
 
     async login(email, password) {
         try {
+            console.log('Attempting login...', email);
             const response = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: {
@@ -74,13 +78,17 @@ class SessionManager {
             });
 
             const data = await response.json();
+            console.log('Login response:', data);
 
             if (!response.ok) {
-                throw new Error(data.message);
+                throw new Error(data.message || 'Login failed');
             }
 
             this.token = data.token;
             localStorage.setItem('token', this.token);
+            localStorage.setItem('userRole', data.user.role);
+            localStorage.setItem('userName', data.user.name);
+            
             this.currentUser = data.user;
             this.isAuthenticated = true;
             this.onAuthStateChange('SIGNED_IN', { user: data.user });
@@ -251,6 +259,32 @@ class SessionManager {
             'Authorization': `Bearer ${this.token}`,
             'Content-Type': 'application/json'
         };
+    }
+
+    getCart() {
+        return this.isAuthenticated ? this.cart : [];
+    }
+
+    updateCart(cartItems) {
+        if (this.isAuthenticated) {
+            this.cart = cartItems;
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+        }
+    }
+
+    clearCart() {
+        this.cart = [];
+        localStorage.removeItem('cart');
+    }
+
+    logout() {
+        this.token = null;
+        this.currentUser = null;
+        this.isAuthenticated = false;
+        this.clearCart();
+        localStorage.removeItem('token');
+        this.onAuthStateChange('SIGNED_OUT', null);
+        window.location.href = 'login.html';
     }
 }
 

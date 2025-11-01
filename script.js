@@ -1,4 +1,12 @@
+// Ensure navigation is visible immediately
 document.addEventListener('DOMContentLoaded', () => {
+  // Make navigation visible immediately
+  const nav = document.getElementById('navigation');
+  if (nav) {
+    nav.style.display = 'block';
+    nav.style.opacity = '1';
+    nav.style.visibility = 'visible';
+  }
   // Initialize Session Manager
   const sessionManager = new SessionManager();
   
@@ -9,10 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // State Management
   const state = {
     currentPage: 'home',
-    cartItems: [
-      { id: 1, name: 'Modern Sofa', price: 899, quantity: 1, image: 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1' },
-      { id: 2, name: 'Coffee Table', price: 299, quantity: 2, image: 'https://images.pexels.com/photos/2082090/pexels-photo-2082090.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1' }
-    ],
+    cartItems: sessionManager.getCart(),
     searchQuery: '',
     selectedCategory: 'all',
     priceRange: [0, 2000],
@@ -29,8 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Utility Functions
-  const getCartTotal = () => state.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const getCartCount = () => state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const getCartTotal = () => sessionManager.isLoggedIn() ? state.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0) : 0;
+  const getCartCount = () => sessionManager.isLoggedIn() ? state.cartItems.reduce((sum, item) => sum + item.quantity, 0) : 0;
+  
+  const updateCart = (items) => {
+    state.cartItems = items;
+    sessionManager.updateCart(items);
+    renderNavigation();
+  };
 
   // DOM References
   const navigationEl = document.getElementById('navigation');
@@ -99,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <button data-page="home" class="nav-link text-2xl font-bold text-amber-600">HomeGo</button>
-          <div class="hidden md:flex items-center space-x-8">
+          <div class="flex items-center space-x-8">
             <button data-page="home" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Home</button>
             <button data-page="products" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">Products</button>
             <button data-page="about" class="nav-link text-gray-700 hover:text-amber-600 transition-colors">About</button>
@@ -114,9 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
               <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
               <input id="search-input" type="text" placeholder="Search furniture..." value="${state.searchQuery}" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500">
             </div>
-            <button data-page="cart" class="nav-link p-2 text-gray-700 hover:text-amber-600 transition-colors relative">
-              <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-              ${getCartCount() > 0 ? `<span class="absolute -top-1 -right-1 bg-amber-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">${getCartCount()}</span>` : ''}
+          <button data-page="cart" class="cart-button nav-link p-2 text-gray-700 hover:text-amber-600 transition-colors relative">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            ${getCartCount() > 0 ? `<span class="cart-badge cart-badge-update">${getCartCount()}</span>` : ''}
             </button>
             
             <!-- User Menu -->
@@ -232,6 +243,66 @@ document.addEventListener('DOMContentLoaded', () => {
         const matchesPrice = product.price >= state.priceRange[0] && product.price <= state.priceRange[1];
         return matchesSearch && matchesCategory && matchesPrice;
     });
+    
+    productsPageEl.innerHTML = `
+      <div class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Products</h2>
+            <p class="text-xl text-gray-600 mb-8">Discover our collection of beautiful furniture</p>
+          </div>
+          
+          <!-- Filters -->
+          <div class="flex flex-wrap gap-4 mb-8 justify-center">
+            <button class="px-4 py-2 rounded-full bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors">All</button>
+            <button class="px-4 py-2 rounded-full bg-white text-gray-700 hover:bg-amber-100 transition-colors">Living Room</button>
+            <button class="px-4 py-2 rounded-full bg-white text-gray-700 hover:bg-amber-100 transition-colors">Bedroom</button>
+            <button class="px-4 py-2 rounded-full bg-white text-gray-700 hover:bg-amber-100 transition-colors">Kitchen</button>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            ${filteredProducts.map(product => `
+              <div class="card group relative">
+                <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-t-lg">
+                  <img src="${product.image}" alt="${product.name}" 
+                       class="h-64 w-full object-cover object-center group-hover:opacity-90 transition-opacity">
+                  <div class="absolute top-4 right-4 space-y-2">
+                    <button data-product-id="${product.id}" 
+                            class="ar-button bg-white p-2 rounded-full shadow-lg hover:bg-blue-600 hover:text-white transition-all">
+                      <i data-lucide="smartphone" class="w-5 h-5"></i>
+                    </button>
+                    <button class="bg-white p-2 rounded-full shadow-lg hover:bg-red-500 hover:text-white transition-all">
+                      <i data-lucide="heart" class="w-5 h-5"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="p-6">
+                  <h3 class="text-lg font-semibold text-gray-900 mb-2">${product.name}</h3>
+                  <div class="flex items-center mb-4">
+                    <div class="flex text-amber-400">
+                      ${Array(5).fill().map((_, i) => 
+                        `<i data-lucide="star" class="w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-current' : ''}"></i>`
+                      ).join('')}
+                    </div>
+                    <span class="ml-2 text-sm text-gray-600">(${product.rating})</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <p class="text-2xl font-bold text-amber-600">${currencyManager.format(product.price)}</p>
+                    <button data-add-product="${product.id}" 
+                            class="add-to-cart-btn px-4 py-2 bg-gray-900 text-white rounded-full 
+                                   hover:bg-amber-600 transition-colors flex items-center gap-2">
+                      <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
     productsPageEl.innerHTML = `
       <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -259,21 +330,56 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       productsPageEl.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+          if (!sessionManager.isLoggedIn()) {
+            window.location.href = 'login.html?redirect=products';
+            return;
+          }
+          
           const id = parseInt(btn.getAttribute('data-add-product'));
           const prod = state.products.find(p => p.id === id);
           const existing = state.cartItems.find(item => item.id === id);
+          
+          let newCartItems;
           if (existing) {
-            existing.quantity += 1;
+            newCartItems = state.cartItems.map(item => 
+              item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+            );
           } else {
-            state.cartItems.push({ ...prod, quantity: 1 });
+            newCartItems = [...state.cartItems, { ...prod, quantity: 1 }];
           }
-          renderNavigation();
+          
+          updateCart(newCartItems);
+          
+          // Show success message
+          const toast = document.createElement('div');
+          toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
+          toast.textContent = 'Item added to cart!';
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 2000);
         });
       });
     }, 0);
   };
 
   const renderCartPage = () => {
+    if (!sessionManager.isLoggedIn()) {
+      cartPageEl.innerHTML = `
+        <div class="py-8">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h2>
+            <div class="text-center py-12">
+              <i data-lucide="lock" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+              <p class="text-xl text-gray-600 mb-4">Please log in to view your cart</p>
+              <a href="login.html" class="inline-block bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition-colors">
+                Sign In
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+    
     if (state.cartItems.length === 0) {
       cartPageEl.innerHTML = `
         <div class="py-8">
@@ -390,8 +496,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleNavClick = (e) => {
     const target = e.target.closest('.nav-link');
     if (target && target.dataset.page) {
+      e.preventDefault();
       state.currentPage = target.dataset.page;
       renderCurrentPage();
+      
+      // Update URL without page reload
+      const url = new URL(window.location);
+      url.searchParams.set('page', target.dataset.page);
+      window.history.pushState({}, '', url);
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
     }
   };
 
@@ -524,11 +639,30 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Event Listeners
-  document.body.addEventListener('click', (e) => {
-    handleNavClick(e);
-    handleCartQuantity(e);
-    handleArClick(e);
-  });
+  const initializeEventListeners = () => {
+    // Navigation clicks
+    document.body.addEventListener('click', (e) => {
+      handleNavClick(e);
+      handleCartQuantity(e);
+      handleArClick(e);
+    });
+
+    // Handle browser back/forward
+    window.addEventListener('popstate', () => {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get('page') || 'home';
+      state.currentPage = page;
+      renderCurrentPage();
+    });
+
+    // Check initial URL params
+    const params = new URLSearchParams(window.location.search);
+    const initialPage = params.get('page');
+    if (initialPage && pageEls[initialPage]) {
+      state.currentPage = initialPage;
+      renderCurrentPage();
+    }
+  };
 
   document.body.addEventListener('input', (e) => {
     if (e.target.id === 'search-input') {
@@ -538,4 +672,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial Render
   render();
+  initializeEventListeners();
 });
